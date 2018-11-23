@@ -1,9 +1,14 @@
 package lu.mkremer.jserve;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.mappers.MapperState;
+import lu.mkremer.jserve.mappers.PathMapper;
 import lu.mkremer.jserve.threading.SocketListener;
 
 public class JServeApplication {
@@ -14,9 +19,13 @@ public class JServeApplication {
 	private final ExecutorService executorService;
 	private final File servePath;
 	
+	private List<PathMapper> pathMappers = new LinkedList<>();
+	
 	private JServeApplication(File servePath) {
 		this.executorService = Executors.newFixedThreadPool(MAX_THREADS);
 		this.servePath = servePath;
+		
+		pathMappers.add(new IndexPathMapper("index.html"));
 	}
 	
 	private void start() {
@@ -33,6 +42,19 @@ public class JServeApplication {
 	
 	public File getServePath() {
 		return servePath;
+	}
+	
+	public String mapPath(String path) {
+		for (PathMapper mapper : pathMappers) {
+			MapperState state = mapper.applies(path);
+			if (state.isApplicable()) {
+				path = mapper.map(path);
+				if (state.isTerminal()) {
+					return path;
+				}
+			}
+		}
+		return path;
 	}
 
 	public static void main(String[] args) {

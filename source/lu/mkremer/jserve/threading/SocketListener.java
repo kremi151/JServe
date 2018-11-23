@@ -22,7 +22,7 @@ public class SocketListener implements Runnable {
 			while (true) {
 				Socket clientSocket = socket.accept();
 				System.out.format("Incoming connection from %s:%d\n", clientSocket.getInetAddress().getHostName(), clientSocket.getPort());
-				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getServePath()));
+				application.getExecutorService().execute(new SocketResponder(clientSocket, application));
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Server has been stopped", e);
