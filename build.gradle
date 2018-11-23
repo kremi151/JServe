@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'source/'
+    }
+  }
+}
+
+dependencies {
+    
+}
