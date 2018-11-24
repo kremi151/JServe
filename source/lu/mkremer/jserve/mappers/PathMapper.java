@@ -1,5 +1,13 @@
 package lu.mkremer.jserve.mappers;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import lu.mkremer.jserve.conf.serializers.PathMapperDeserializer;
+import lu.mkremer.jserve.conf.serializers.PathMapperSerializer;
+
+@JsonSerialize(using = PathMapperSerializer.class)
+@JsonDeserialize(using = PathMapperDeserializer.class)
 public interface PathMapper {
 
 	/**

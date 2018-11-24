@@ -16,13 +16,13 @@ public class SocketListener implements Runnable {
 
 	@Override
 	public void run() {
-		try (ServerSocket socket = new ServerSocket(application.getPort())) {
-			System.out.format("Server listening on port %d\n", application.getPort());
-			System.out.format("Serve path %s\n", application.getServePath().toString());
+		try (ServerSocket socket = new ServerSocket(application.getConfiguration().getPort())) {
+			System.out.format("Server listening on port %d\n", application.getConfiguration().getPort());
+			System.out.format("Serve path %s\n", application.getConfiguration().getServePath().toString());
 			while (true) {
 				Socket clientSocket = socket.accept();
 				System.out.format("Incoming connection from %s:%d\n", clientSocket.getInetAddress().getHostName(), clientSocket.getPort());
-				application.getExecutorService().execute(new SocketResponder(clientSocket, application));
+				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getConfiguration()));
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Server has been stopped", e);

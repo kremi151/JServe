@@ -2,16 +2,20 @@ package lu.mkremer.jserve.mappers;
 
 public class PrefixPathMapper implements PathMapper {
 	
-	private final String fromPrefix;
-	private final String toPrefix;
-	private final boolean ignoreCase;
-	private final boolean terminal;
+	private String fromPrefix;
+	private String toPrefix;
+	private boolean ignoreCase;
+	private boolean terminal;
 	
 	public PrefixPathMapper(String fromPrefix, String toPrefix, boolean ignoreCase, boolean terminal) {
 		this.fromPrefix = fromPrefix;
 		this.toPrefix = toPrefix;
 		this.ignoreCase = ignoreCase;
 		this.terminal = terminal;
+	}
+	
+	public PrefixPathMapper() {
+		this("", "", false, false);
 	}
 
 	@Override
@@ -26,6 +30,38 @@ public class PrefixPathMapper implements PathMapper {
 	@Override
 	public String map(String path) {
 		return toPrefix + path.substring(fromPrefix.length());
+	}
+
+	public String getFromPrefix() {
+		return fromPrefix;
+	}
+
+	public void setFromPrefix(String fromPrefix) {
+		this.fromPrefix = fromPrefix;
+	}
+
+	public String getToPrefix() {
+		return toPrefix;
+	}
+
+	public void setToPrefix(String toPrefix) {
+		this.toPrefix = toPrefix;
+	}
+
+	public boolean isIgnoreCase() {
+		return ignoreCase;
+	}
+
+	public void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
+	}
+
+	public boolean isTerminal() {
+		return terminal;
+	}
+
+	public void setTerminal(boolean terminal) {
+		this.terminal = terminal;
 	}
 
 }

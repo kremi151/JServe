@@ -2,7 +2,7 @@ package lu.mkremer.jserve.mappers;
 
 public class IndexPathMapper implements PathMapper {
 	
-	private final String indexFile;
+	private String indexFile;
 	
 	public IndexPathMapper(String indexFile) {
 		this.indexFile = indexFile;
@@ -19,6 +19,14 @@ public class IndexPathMapper implements PathMapper {
 	@Override
 	public String map(String path) {
 		return path + indexFile; 
+	}
+
+	public String getIndexFile() {
+		return indexFile;
+	}
+
+	public void setIndexFile(String indexFile) {
+		this.indexFile = indexFile;
 	}
 
 }

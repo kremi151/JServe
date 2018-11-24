@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import lu.mkremer.jserve.JServeApplication;
+import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
 import lu.mkremer.jserve.util.Request;
 import lu.mkremer.jserve.util.RequestParser;
@@ -21,11 +21,11 @@ public class SocketResponder implements Runnable {
 	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
 
 	private final Socket socket;
-	private final JServeApplication application;
+	private final ServerConfiguration configuration;
 
-	public SocketResponder(Socket socket, JServeApplication application) {
+	public SocketResponder(Socket socket, ServerConfiguration configuration) {
 		this.socket = socket;
-		this.application = application;
+		this.configuration = configuration;
 	}
 
 	@Override
@@ -38,14 +38,14 @@ public class SocketResponder implements Runnable {
 			Date requestDate = new Date();
 			Date expireDate = new Date(requestDate.getTime() + 3600000);
 			
-			final String mappedPath = application.mapPath(request.getPath());
+			final String mappedPath = configuration.mapPath(request.getPath());
 			
-			File requestedFile = new File(application.getServePath(), mappedPath); //TODO: Prevent cross path referencing
+			File requestedFile = new File(configuration.getServePath(), mappedPath); //TODO: Prevent cross path referencing
 			
 			System.out.println("Method: " + request.getMethod());
 			System.out.println("Path: " + request.getPath() + " -> " + mappedPath);
 			
-			if (!requestedFile.exists()) {
+			if (!requestedFile.exists() || requestedFile.isDirectory()) {
 				out.write("HTTP/1.0 404\r\n");
 				return;
 			}
