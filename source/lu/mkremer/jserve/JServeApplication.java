@@ -59,6 +59,8 @@ public class JServeApplication {
 			} else if (arg.equals("--export-config")) {
 				File destination = new File(args[++i]);
 				saveConfigToFile(configuration, destination);
+				System.out.println("Configuration file exported to " + destination);
+				return;
 			}
 		}
 		

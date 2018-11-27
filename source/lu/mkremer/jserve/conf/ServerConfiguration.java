@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import lu.mkremer.jserve.errorhandling.DefaultErrorHandler;
+import lu.mkremer.jserve.errorhandling.ErrorHandler;
 import lu.mkremer.jserve.mappers.MapperState;
 import lu.mkremer.jserve.mappers.PathMapper;
 
@@ -22,6 +24,7 @@ public class ServerConfiguration {
 	private String servePath = DEFAULT_SERVE_PATH;
 	private int port = DEFAULT_PORT;
 	private List<PathMapper> pathMappers = new ArrayList<>();
+	private List<ErrorHandler> errorHandlers = new ArrayList<>();
 	private int maxThreads = DEFAULT_MAX_THREADS;
 	
 	public ServerConfiguration() {
@@ -34,6 +37,14 @@ public class ServerConfiguration {
 
 	public void setPathMappers(List<PathMapper> pathMappers) {
 		this.pathMappers = pathMappers;
+	}
+
+	public List<ErrorHandler> getErrorHandlers() {
+		return errorHandlers;
+	}
+
+	public void setErrorHandlers(List<ErrorHandler> errorHandlers) {
+		this.errorHandlers = errorHandlers;
 	}
 
 	public String getServePath() {
@@ -71,6 +82,15 @@ public class ServerConfiguration {
 			}
 		}
 		return path;
+	}
+	
+	public ErrorHandler findErrorHandler(int code, String path) {
+		for (ErrorHandler handler : errorHandlers) {
+			if (handler.canHandle(code, path)) {
+				return handler;
+			}
+		}
+		return new DefaultErrorHandler();
 	}
 
 }

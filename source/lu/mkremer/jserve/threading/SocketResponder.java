@@ -36,7 +36,6 @@ public class SocketResponder implements Runnable {
 			Request request = RequestParser.parseRequest(reader);
 			
 			Date requestDate = new Date();
-			Date expireDate = new Date(requestDate.getTime() + 3600000);
 			
 			final String mappedPath = configuration.mapPath(request.getPath());
 			
@@ -46,37 +45,12 @@ public class SocketResponder implements Runnable {
 			System.out.println("Path: " + request.getPath() + " -> " + mappedPath);
 			
 			if (!requestedFile.exists() || requestedFile.isDirectory()) {
-				out.write("HTTP/1.0 404\r\n");
+				configuration.findErrorHandler(404, mappedPath).respond(404, mappedPath, out, configuration);
 				return;
 			}
 
 			out.write("HTTP/1.0 200 OK\r\n");
-			out.write("Date: ");
-			out.write(dateFormatter.format(requestDate));
-			out.write("\r\n");
-			out.write("Server: JServe/0.0.1\r\n");
-			out.write("Content-Type: ");
-			out.write(Files.probeContentType(requestedFile.toPath()));
-			out.write("\r\n");
-			out.write("Content-Length: ");
-			out.write(String.valueOf(requestedFile.length()));
-			out.write("\r\n");
-			out.write("Expires: ");
-			out.write(dateFormatter.format(expireDate));
-			out.write("\r\n");
-			out.write("Last-modified: ");
-			out.write(dateFormatter.format(new Date(requestedFile.lastModified())));
-			out.write("\r\n");
-			out.write("\r\n");
-			byte buffer[] = new byte[2048];
-			int length;
-			try (FileInputStream fis = new FileInputStream(requestedFile)) {
-				while ((length = fis.read(buffer)) != -1) {
-					out.write(buffer, 0, length);
-					out.flush();
-				}
-			}
-			out.write("\r\n");
+			serveFile(requestedFile, requestDate, out);
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -88,6 +62,37 @@ public class SocketResponder implements Runnable {
 			}
 		}
 
+	}
+	
+	public static void serveFile(File file, Date requestDate, WriteableOutputStream out) throws IOException {
+		Date expireDate = new Date(requestDate.getTime() + 3600000);
+		
+		out.write("Date: ");
+		out.write(dateFormatter.format(requestDate));
+		out.write("\r\n");
+		out.write("Server: JServe/0.0.1\r\n");
+		out.write("Content-Type: ");
+		out.write(Files.probeContentType(file.toPath()));
+		out.write("\r\n");
+		out.write("Content-Length: ");
+		out.write(String.valueOf(file.length()));
+		out.write("\r\n");
+		out.write("Expires: ");
+		out.write(dateFormatter.format(expireDate));
+		out.write("\r\n");
+		out.write("Last-modified: ");
+		out.write(dateFormatter.format(new Date(file.lastModified())));
+		out.write("\r\n");
+		out.write("\r\n");
+		byte buffer[] = new byte[2048];
+		int length;
+		try (FileInputStream fis = new FileInputStream(file)) {
+			while ((length = fis.read(buffer)) != -1) {
+				out.write(buffer, 0, length);
+				out.flush();
+			}
+		}
+		out.write("\r\n");
 	}
 
 }
