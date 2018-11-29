@@ -21,7 +21,6 @@ public class SocketListener implements Runnable {
 			System.out.format("Serve path %s\n", application.getConfiguration().getServePath().toString());
 			while (true) {
 				Socket clientSocket = socket.accept();
-				System.out.format("Incoming connection from %s:%d\n", clientSocket.getInetAddress().getHostName(), clientSocket.getPort());
 				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getConfiguration()));
 			}
 		} catch (IOException e) {

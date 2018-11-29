@@ -1,8 +1,11 @@
 package lu.mkremer.jserve.conf;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -21,7 +24,7 @@ public class ServerConfiguration {
 	public static final int DEFAULT_PORT = 1806;
 	public static final int DEFAULT_MAX_THREADS = 10;
 
-	private String servePath = DEFAULT_SERVE_PATH;
+	private Path servePath = Paths.get(DEFAULT_SERVE_PATH);
 	private int port = DEFAULT_PORT;
 	private List<PathMapper> pathMappers = new ArrayList<>();
 	private List<ErrorHandler> errorHandlers = new ArrayList<>();
@@ -48,11 +51,16 @@ public class ServerConfiguration {
 	}
 
 	public String getServePath() {
-		return servePath;
+		return servePath.toString();
 	}
 
 	public void setServePath(String servePath) {
-		this.servePath = servePath;
+		this.servePath = Paths.get(servePath);
+	}
+	
+	@JsonIgnore
+	public Path getServeNioPath() {
+		return servePath;
 	}
 	
 	public int getPort() {

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,15 +41,20 @@ public class SocketResponder implements Runnable {
 			
 			final String mappedPath = configuration.mapPath(request.getPath());
 			
-			File requestedFile = new File(configuration.getServePath(), mappedPath); //TODO: Prevent cross path referencing
-			
-			System.out.println("Method: " + request.getMethod());
-			System.out.println("Path: " + request.getPath() + " -> " + mappedPath);
-			
-			if (!requestedFile.exists() || requestedFile.isDirectory()) {
-				configuration.findErrorHandler(404, mappedPath).respond(404, mappedPath, out, configuration);
+			Path requestedPath = Paths.get(configuration.getServePath(), mappedPath);
+			if (!requestedPath.startsWith(configuration.getServeNioPath())) {
+				respondWithError(406, request, mappedPath, out);
 				return;
 			}
+			
+			File requestedFile = requestedPath.toFile();
+
+			if (!requestedFile.exists() || requestedFile.isDirectory()) {
+				respondWithError(404, request, mappedPath, out);
+				return;
+			}
+			
+			System.out.format("%s 200 %s -> %s (%s:%d)\n", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
 
 			out.write("HTTP/1.0 200 OK\r\n");
 			serveFile(requestedFile, requestDate, out);
@@ -62,6 +69,11 @@ public class SocketResponder implements Runnable {
 			}
 		}
 
+	}
+	
+	private void respondWithError(int code, Request request, String mappedPath, WriteableOutputStream out) throws IOException {
+		System.err.format("%s %d %s -> %s (%s:%d)\n", request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
+		configuration.findErrorHandler(code, mappedPath).respond(code, mappedPath, out, configuration);
 	}
 	
 	public static void serveFile(File file, Date requestDate, WriteableOutputStream out) throws IOException {
