@@ -23,8 +23,10 @@ public class ServerConfiguration {
 	public static final String DEFAULT_SERVE_PATH = "/";
 	public static final int DEFAULT_PORT = 1806;
 	public static final int DEFAULT_MAX_THREADS = 10;
+	public static final String DEFAULT_MIME_FILE = "default";
 
 	private Path servePath = Paths.get(DEFAULT_SERVE_PATH);
+	private String mimeSource = DEFAULT_MIME_FILE;
 	private int port = DEFAULT_PORT;
 	private List<PathMapper> pathMappers = new ArrayList<>();
 	private List<ErrorHandler> errorHandlers = new ArrayList<>();
@@ -58,6 +60,14 @@ public class ServerConfiguration {
 		this.servePath = Paths.get(servePath);
 	}
 	
+	public String getMimeSource() {
+		return mimeSource;
+	}
+
+	public void setMimeSource(String mimeSource) {
+		this.mimeSource = mimeSource;
+	}
+
 	@JsonIgnore
 	public Path getServeNioPath() {
 		return servePath;

@@ -1,6 +1,7 @@
 package lu.mkremer.jserve;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
@@ -44,6 +45,7 @@ public class JServeApplication {
 		boolean configFromFile = false;
 		ServerConfiguration configuration = new ServerConfiguration();
 		configuration.setServePath(System.getProperty("user.dir"));
+		configuration.setMimeSource(ServerConfiguration.DEFAULT_MIME_FILE);
 		configuration.setPort(ServerConfiguration.DEFAULT_PORT);
 		configuration.setMaxThreads(ServerConfiguration.DEFAULT_MAX_THREADS);
 		configuration.getPathMappers().add(new IndexPathMapper("index.html"));
@@ -56,6 +58,8 @@ public class JServeApplication {
 				configuration.setPort(Integer.parseInt(args[++i]));
 			} else if (!configFromFile && arg.equals("-m")) {
 				configuration.setMaxThreads(Integer.parseInt(args[++i]));
+			} else if (!configFromFile && arg.equals("-t")) {
+				configuration.setMimeSource(args[++i]);
 			} else if (arg.equals("-c")) {
 				configuration = loadConfigFromFile(new File(args[++i]));
 				configFromFile = true;
@@ -67,8 +71,19 @@ public class JServeApplication {
 			}
 		}
 		
-		ClassLoader classLoader = JServeApplication.class.getClassLoader();
-		MimeContext.getInstance().loadMimeTypes(new CSVReader(new InputStreamReader(classLoader.getResourceAsStream("mime/types.csv"))));
+		CSVReader csvReader;
+		if (configuration.getMimeSource() == null || configuration.getMimeSource().equals(ServerConfiguration.DEFAULT_MIME_FILE)) {
+			ClassLoader classLoader = JServeApplication.class.getClassLoader();
+			csvReader = new CSVReader(new InputStreamReader(classLoader.getResourceAsStream("mime/types.csv")));
+		} else {
+			csvReader = new CSVReader(new FileReader(new File(configuration.getMimeSource())));
+		}
+		
+		try {
+			MimeContext.getInstance().loadMimeTypes(csvReader);
+		} finally {
+			csvReader.close();
+		}
 		
 		new JServeApplication(configuration).start();
 	}
