@@ -17,6 +17,7 @@ import lu.mkremer.jserve.io.WriteableOutputStream;
 import lu.mkremer.jserve.util.MimeContext;
 import lu.mkremer.jserve.util.Request;
 import lu.mkremer.jserve.util.RequestParser;
+import lu.mkremer.jserve.util.Request.Method;
 
 public class SocketResponder implements Runnable {
 	
@@ -37,20 +38,25 @@ public class SocketResponder implements Runnable {
 			
 			Request request = RequestParser.parseRequest(reader);
 			
+			if (request.getMethod() != Method.GET) {
+				respondWithError(405, "Method not allowed", request, request.getPath(), out);
+				return;
+			}
+			
 			Date requestDate = new Date();
 			
 			final String mappedPath = configuration.mapPath(request.getPath());
 			
 			Path requestedPath = Paths.get(configuration.getServePath(), mappedPath);
 			if (!requestedPath.startsWith(configuration.getServeNioPath())) {
-				respondWithError(406, request, mappedPath, out);
+				respondWithError(406, "Not acceptable", request, mappedPath, out);
 				return;
 			}
 			
 			File requestedFile = requestedPath.toFile();
 
 			if (!requestedFile.exists() || requestedFile.isDirectory()) {
-				respondWithError(404, request, mappedPath, out);
+				respondWithError(404, "Not found", request, mappedPath, out);
 				return;
 			}
 			
@@ -71,9 +77,9 @@ public class SocketResponder implements Runnable {
 
 	}
 	
-	private void respondWithError(int code, Request request, String mappedPath, WriteableOutputStream out) throws IOException {
+	private void respondWithError(int code, String status, Request request, String mappedPath, WriteableOutputStream out) throws IOException {
 		System.err.format("%s %d %s -> %s (%s:%d)\n", request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
-		configuration.findErrorHandler(code, mappedPath).respond(code, mappedPath, out, configuration);
+		configuration.findErrorHandler(code, mappedPath).respond(code, status, mappedPath, out, configuration);
 	}
 	
 	public static void serveFile(File file, Date requestDate, WriteableOutputStream out) throws IOException {

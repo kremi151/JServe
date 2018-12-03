@@ -10,7 +10,7 @@ public class RedirectErrorHandler extends AbstractRangedErrorHandler {
 	private String redirect;
 
 	@Override
-	public void respond(int errorCode, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
+	public void respond(int errorCode, String status, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
 		out.write("HTTP/1.0 302 Not available\r\n");
 		out.write("Location: ");
 		out.write(redirect);

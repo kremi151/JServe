@@ -13,16 +13,20 @@ public class ErrorPageHandler extends AbstractRangedErrorHandler {
 	private String path;
 
 	@Override
-	public void respond(int errorCode, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
+	public void respond(int errorCode, String status, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
 		File file = new File(configuration.getServePath(), path);
 		
 		if (!file.exists() || file.isDirectory()) {
-			out.write("HTTP/1.0 404 Error page not found\r\n");
+			out.write("HTTP/1.0 404 Not found\r\n");
 			return;
 		}
 		
 		out.write("HTTP/1.0 ");
 		out.write(String.valueOf(errorCode));
+		if (status != null) {
+			out.write(" ");
+			out.write(status);
+		}
 		out.write("\r\n");
 		SocketResponder.serveFile(file, new Date(), out);
 	}

@@ -16,6 +16,6 @@ public interface ErrorHandler {
 	
 	boolean canHandle(int errorCode, String path);
 	
-	void respond(int errorCode, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException;
+	void respond(int errorCode, String status, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException;
 
 }

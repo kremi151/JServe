@@ -13,9 +13,13 @@ public class DefaultErrorHandler implements ErrorHandler {
 	}
 
 	@Override
-	public void respond(int errorCode, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
+	public void respond(int errorCode, String status, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
 		out.write("HTTP/1.0 ");
 		out.write(String.valueOf(errorCode));
+		if (status != null) {
+			out.write(" ");
+			out.write(status);
+		}
 		out.write("\r\n");
 	}
 

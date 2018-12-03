@@ -22,6 +22,10 @@ public class Request {
 	}
 
 	public static enum Method {
-		GET
+		GET,
+		POST,
+		PUT,
+		DELETE,
+		PATCH
 	}
 }
