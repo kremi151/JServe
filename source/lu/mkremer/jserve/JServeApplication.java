@@ -2,6 +2,7 @@ package lu.mkremer.jserve;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,8 +12,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lu.mkremer.jserve.conf.ServerConfiguration;
+import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
 import lu.mkremer.jserve.threading.SocketListener;
+import lu.mkremer.jserve.util.MimeContext;
 
 public class JServeApplication {
 	
@@ -63,6 +66,9 @@ public class JServeApplication {
 				return;
 			}
 		}
+		
+		ClassLoader classLoader = JServeApplication.class.getClassLoader();
+		MimeContext.getInstance().loadMimeTypes(new CSVReader(new InputStreamReader(classLoader.getResourceAsStream("mime/types.csv"))));
 		
 		new JServeApplication(configuration).start();
 	}
