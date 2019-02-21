@@ -9,30 +9,42 @@ repositories {
 }
 
 sourceSets {
-  main {
-    java {
-      srcDir 'source/'
+    main {
+        java {
+            srcDir 'src/main/java/'
+        }
+        resources {
+            srcDir 'src/main/res/'
+        }
     }
-    resources {
-      srcDir 'resources/'
+    test {
+        java {
+            srcDir 'src/test/java/'
+        }
     }
-  }
-}
-
-dependencies {
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
 }
 
 jar {
     baseName 'jserve'
     version '1.1.0'
-    
+
     manifest {
         attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
-                   'Class-Path': configurations.runtime.files.collect { "$it.name" }.join(' ')
+                'Class-Path': configurations.runtime.files.collect { "$it.name" }.join(' ')
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+dependencies {
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+    useJUnitPlatform()
 }
