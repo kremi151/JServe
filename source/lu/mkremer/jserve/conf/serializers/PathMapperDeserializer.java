@@ -8,10 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import lu.mkremer.jserve.mappers.IndexPathMapper;
-import lu.mkremer.jserve.mappers.PathMapper;
-import lu.mkremer.jserve.mappers.PrefixPathMapper;
-import lu.mkremer.jserve.mappers.UnknownPathMapper;
+import lu.mkremer.jserve.mappers.*;
 
 public class PathMapperDeserializer extends JsonDeserializer<PathMapper>{
 
@@ -26,6 +23,12 @@ public class PathMapperDeserializer extends JsonDeserializer<PathMapper>{
 			mapper.setFromPrefix(node.get("from").asText("/"));
 			mapper.setToPrefix(node.get("to").asText("/"));
 			mapper.setIgnoreCase(node.get("ignore_case").asBoolean(false));
+			mapper.setTerminal(node.get("terminal").asBoolean(false));
+			return mapper;
+		} else if (type.equalsIgnoreCase("glob")) {
+			GlobMapper mapper = new GlobMapper();
+			mapper.setGlobMatcher(node.get("pattern").asText("/**"));
+			mapper.setDestination(node.get("destination").asText("/"));
 			mapper.setTerminal(node.get("terminal").asBoolean(false));
 			return mapper;
 		} else {

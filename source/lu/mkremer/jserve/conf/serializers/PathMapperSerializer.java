@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+import lu.mkremer.jserve.mappers.GlobMapper;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
 import lu.mkremer.jserve.mappers.PathMapper;
 import lu.mkremer.jserve.mappers.PrefixPathMapper;
@@ -25,6 +26,11 @@ public class PathMapperSerializer extends JsonSerializer<PathMapper>{
 			gen.writeStringField("from", mapper.getFromPrefix());
 			gen.writeStringField("to", mapper.getToPrefix());
 			gen.writeBooleanField("ignore_case", mapper.isIgnoreCase());
+			gen.writeBooleanField("terminal", mapper.isTerminal());
+		} else if (value instanceof GlobMapper) {
+			GlobMapper mapper = (GlobMapper) value;
+			gen.writeStringField("pattern", mapper.getGlobMatcher());
+			gen.writeStringField("destination", mapper.getDestination());
 			gen.writeBooleanField("terminal", mapper.isTerminal());
 		} else {
 			gen.writeStringField("type", "unknown");
