@@ -29,6 +29,7 @@ public class PathMapperSerializer extends JsonSerializer<PathMapper>{
 			gen.writeBooleanField("terminal", mapper.isTerminal());
 		} else if (value instanceof GlobMapper) {
 			GlobMapper mapper = (GlobMapper) value;
+			gen.writeStringField("type", "glob");
 			gen.writeStringField("pattern", mapper.getGlobMatcher());
 			gen.writeStringField("destination", mapper.getDestination());
 			gen.writeBooleanField("terminal", mapper.isTerminal());

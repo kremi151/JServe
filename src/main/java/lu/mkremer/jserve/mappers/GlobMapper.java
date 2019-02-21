@@ -1,16 +1,19 @@
 package lu.mkremer.jserve.mappers;
 
 import java.nio.file.FileSystems;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 
 public class GlobMapper implements PathMapper {
 
-    private String globMatcher;
+    private PathMatcher matcher;
+    private String pattern;
     private String destination;
     private boolean terminal;
 
-    public GlobMapper(String globMatcher, String destination, boolean terminal) {
-        this.globMatcher = "glob:" + globMatcher;
+    public GlobMapper(String pattern, String destination, boolean terminal) {
+        this.pattern = pattern;
+        this.matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
         this.destination = destination;
         this.terminal = terminal;
     }
@@ -21,10 +24,7 @@ public class GlobMapper implements PathMapper {
 
     @Override
     public MapperState applies(String path) {
-        return FileSystems
-                .getDefault()
-                .getPathMatcher(globMatcher)
-                .matches(Paths.get(path)) ? getAcceptance() : MapperState.NOT_APPLICABLE;
+        return matcher.matches(Paths.get(path)) ? getAcceptance() : MapperState.NOT_APPLICABLE;
     }
 
     private MapperState getAcceptance() {
@@ -37,11 +37,12 @@ public class GlobMapper implements PathMapper {
     }
 
     public String getGlobMatcher() {
-        return globMatcher;
+        return pattern;
     }
 
-    public void setGlobMatcher(String globMatcher) {
-        this.globMatcher = globMatcher;
+    public void setGlobMatcher(String pattern) {
+        this.matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+        this.pattern = pattern;
     }
 
     public String getDestination() {
