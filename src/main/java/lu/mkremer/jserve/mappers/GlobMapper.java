@@ -1,14 +1,22 @@
 package lu.mkremer.jserve.mappers;
 
+import lu.mkremer.jserve.api.annotation.ConfigField;
+import lu.mkremer.jserve.api.annotation.Configurable;
+
 import java.nio.file.FileSystems;
 import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 
+@Configurable(id = MapperTypes.PATH_MAPPER_GLOB_ID)
 public class GlobMapper implements PathMapper {
 
     private PathMatcher matcher;
+
+    @ConfigField(required = true)
     private String pattern;
+    @ConfigField(required = true, name = { "to", "destination" })
     private String destination;
+    @ConfigField(defaultValue = "false")
     private boolean terminal;
 
     public GlobMapper(String pattern, String destination, boolean terminal) {
@@ -36,11 +44,11 @@ public class GlobMapper implements PathMapper {
         return destination;
     }
 
-    public String getGlobMatcher() {
+    public String getPattern() {
         return pattern;
     }
 
-    public void setGlobMatcher(String pattern) {
+    public void setPattern(String pattern) {
         this.matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
         this.pattern = pattern;
     }

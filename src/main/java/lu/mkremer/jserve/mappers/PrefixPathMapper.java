@@ -1,10 +1,18 @@
 package lu.mkremer.jserve.mappers;
 
+import lu.mkremer.jserve.api.annotation.ConfigField;
+import lu.mkremer.jserve.api.annotation.Configurable;
+
+@Configurable(id = MapperTypes.PATH_MAPPER_PREFIX_ID)
 public class PrefixPathMapper implements PathMapper {
-	
+
+	@ConfigField(required = true, name = "from")
 	private String fromPrefix;
+	@ConfigField(required = true, name = "to")
 	private String toPrefix;
+	@ConfigField(name = "ignore_case", defaultValue = "false")
 	private boolean ignoreCase;
+	@ConfigField(defaultValue = "false")
 	private boolean terminal;
 	
 	public PrefixPathMapper(String fromPrefix, String toPrefix, boolean ignoreCase, boolean terminal) {
