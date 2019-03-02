@@ -1,6 +1,5 @@
 package lu.mkremer.jserve.conf;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
@@ -8,6 +7,7 @@ import lu.mkremer.jserve.exception.DuplicateEntryException;
 import lu.mkremer.jserve.exception.InvalidConfigurableException;
 import lu.mkremer.jserve.exception.NotMappableException;
 import lu.mkremer.jserve.exception.UnknownIdException;
+import lu.mkremer.jserve.io.WritableNode;
 import lu.mkremer.jserve.mappers.PathMapper;
 import lu.mkremer.jserve.util.DefaultConstructorFactory;
 import lu.mkremer.jserve.util.StringHelper;
@@ -110,12 +110,12 @@ public class PathMapperFactory {
         return (M) mapper;
     }
 
-    public void serializeMapper(JsonGenerator gen, PathMapper mapper) throws IOException {
+    public void serializeMapper(WritableNode out, PathMapper mapper) throws IOException {
         final String type = CLASS_TO_ID.get(mapper.getClass());
         if (type == null) {
             throw new NotMappableException("PathMapper class " + mapper.getClass() + " is not registered");
         }
-        gen.writeStringField("type", type);
+        out.writeStringProperty("type", type);
         try {
             Field[] fields = mapper.getClass().getDeclaredFields();
             for (Field field : fields) {
@@ -137,7 +137,10 @@ public class PathMapperFactory {
                 } else {
                     value = field.get(mapper);
                 }
-                gen.writeObjectField(nameArray[0], value);
+                if (value == null) {
+                    value = ValueHelper.parseValueForType(prop.defaultValue(), field.getType());
+                }
+                out.writeObjectProperty(nameArray[0], value);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new NotMappableException("Reflection error", e);

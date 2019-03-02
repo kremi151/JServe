@@ -4,7 +4,33 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class ValueHelper {
 
+    public static Object getDefaultValueForType(Class<?> typeClazz) {
+        if (typeClazz == char.class) {
+            return '\0';
+        } else if (typeClazz == boolean.class) {
+            return false;
+        } else if (typeClazz == byte.class) {
+            return (byte) 0;
+        } else if (typeClazz == short.class) {
+            return (short) 0;
+        } else if (typeClazz == int.class) {
+            return 0;
+        } else if (typeClazz == long.class) {
+            return 0L;
+        } else if (typeClazz == float.class) {
+            return 0.0F;
+        } else if (typeClazz == double.class) {
+            return 0.0D;
+        } else if (!typeClazz.isPrimitive()) {
+            return null;
+        }
+        throw new IllegalArgumentException("Cannot determine default value of type " + typeClazz);
+    }
+
     public static Object parseValueForType(String value, Class<?> typeClazz) {
+        if (value == null || value.length() == 0) {
+            return getDefaultValueForType(typeClazz);
+        }
         if (typeClazz == String.class) {
             return value;
         } else if (typeClazz == Character.class || typeClazz == char.class) {
