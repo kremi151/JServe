@@ -133,7 +133,7 @@ public class SerializingTest {
         TestMapper mapper = createTestMapper(true);
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode json = objectMapper.createObjectNode();
-        WritableObjectNode node = new WritableObjectNode(json);
+        WritableObjectNode node = new WritableObjectNode(json, objectMapper);
         factory.serializeMapper(node, mapper);
 
         assertEquals("magicA", json.get("custom_prop_a").asText());
@@ -163,7 +163,7 @@ public class SerializingTest {
         TestMapper mapper = createTestMapper(false);
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode json = objectMapper.createObjectNode();
-        WritableObjectNode node = new WritableObjectNode(json);
+        WritableObjectNode node = new WritableObjectNode(json, objectMapper);
         factory.serializeMapper(node, mapper);
 
         assertEquals("magicA", json.get("custom_prop_a").asText());

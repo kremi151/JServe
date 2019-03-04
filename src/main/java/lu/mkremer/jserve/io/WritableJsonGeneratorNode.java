@@ -21,4 +21,14 @@ public class WritableJsonGeneratorNode implements WritableNode {
     public void writeObjectProperty(String name, Object value) throws IOException {
         gen.writeObjectField(name, value);
     }
+
+    @Override
+    public void startObject(String name) throws IOException {
+        gen.writeObjectFieldStart(name);
+    }
+
+    @Override
+    public void endObject() throws IOException {
+        gen.writeEndObject();
+    }
 }

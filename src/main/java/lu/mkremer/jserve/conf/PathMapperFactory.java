@@ -1,6 +1,7 @@
 package lu.mkremer.jserve.conf;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lu.mkremer.jserve.api.annotation.Child;
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
 import lu.mkremer.jserve.exception.DuplicateEntryException;
@@ -77,30 +78,13 @@ public class PathMapperFactory {
             for (Field field : fields) {
                 field.setAccessible(true);
                 ConfigField prop = field.getAnnotation(ConfigField.class);
-                if (prop == null) {
+                if (prop != null) {
+                    deserializeConfigField(node, prop, field, clazz, mapper);
                     continue;
                 }
-                String[] nameArray = prop.name();
-                if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
-                    nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
-                }
-                JsonNode valueNode = readJsonValue(node, nameArray);
-                Object value;
-                if (valueNode == null && prop.required()) {
-                    throw new NotMappableException("Missing property: " + nameArray[0]);
-                }
-                if (valueNode == null) {
-                    value = ValueHelper.parseValueForType(prop.defaultValue(), field.getType());
-                } else {
-                    value = ValueHelper.parseJsonValueForType(valueNode, field.getType());
-                }
-                final String setterName = StringHelper.toSetterName(field.getName());
-                Method setter = tryGetMethod(clazz, setterName, field.getType());
-                if (setter != null) {
-                    setter.setAccessible(true);
-                    setter.invoke(mapper, value);
-                } else {
-                    field.set(mapper, value);
+                Child childProp = field.getAnnotation(Child.class);
+                if (childProp != null) {
+                    deserializeChildField(node, childProp, field, clazz, mapper);
                 }
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -108,6 +92,57 @@ public class PathMapperFactory {
         }
 
         return (M) mapper;
+    }
+
+    private void deserializeConfigField(JsonNode node, ConfigField prop, Field field, Class<? extends PathMapper> clazz, PathMapper mapper) throws InvocationTargetException, IllegalAccessException {
+        String[] nameArray = prop.name();
+        if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
+            nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
+        }
+        JsonNode valueNode = readJsonValue(node, nameArray);
+        Object value;
+        if (valueNode == null && prop.required()) {
+            throw new NotMappableException("Missing property: " + nameArray[0]);
+        }
+        if (valueNode == null) {
+            value = ValueHelper.parseValueForType(prop.defaultValue(), field.getType());
+        } else {
+            value = ValueHelper.parseJsonValueForType(valueNode, field.getType());
+        }
+        final String setterName = StringHelper.toSetterName(field.getName());
+        Method setter = tryGetMethod(clazz, setterName, field.getType());
+        if (setter != null) {
+            setter.setAccessible(true);
+            setter.invoke(mapper, value);
+        } else {
+            field.set(mapper, value);
+        }
+    }
+
+    private void deserializeChildField(JsonNode node, Child prop, Field field, Class<? extends PathMapper> clazz, PathMapper mapper) throws InvocationTargetException, IllegalAccessException {
+        String[] nameArray = prop.name();
+        if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
+            nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
+        }
+        JsonNode valueNode = readJsonValue(node, nameArray);
+        if (valueNode == null) {
+            if (prop.required()) {
+                throw new NotMappableException("Required child mapper " + nameArray[0] + " not found");
+            } else {
+                return;
+            }
+        } else if (!valueNode.isObject()) {
+            throw new NotMappableException("Child mapper " + nameArray[0] + " is not a path mapper");
+        }
+        PathMapper child = parseMapper(valueNode);
+        final String setterName = StringHelper.toSetterName(field.getName());
+        Method setter = tryGetMethod(clazz, setterName, field.getType());
+        if (setter != null) {
+            setter.setAccessible(true);
+            setter.invoke(mapper, child);
+        } else {
+            field.set(mapper, child);
+        }
     }
 
     public void serializeMapper(WritableNode out, PathMapper mapper) throws IOException {
@@ -121,29 +156,61 @@ public class PathMapperFactory {
             for (Field field : fields) {
                 field.setAccessible(true);
                 ConfigField prop = field.getAnnotation(ConfigField.class);
-                if (prop == null) {
+                if (prop != null) {
+                    serializeConfigField(prop, field, mapper, out);
                     continue;
                 }
-                String[] nameArray = prop.name();
-                if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
-                    nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
+                Child childProp = field.getAnnotation(Child.class);
+                if (childProp != null) {
+                    serializeChildField(childProp, field, mapper, out);
                 }
-                final String getterName = StringHelper.toGetterName(field.getName(), field.getType());
-                Object value;
-                Method getter = tryGetMethod(mapper.getClass(), getterName, field.getType());
-                if (getter != null) {
-                    getter.setAccessible(true);
-                    value = getter.invoke(mapper);
-                } else {
-                    value = field.get(mapper);
-                }
-                if (value == null) {
-                    value = ValueHelper.parseValueForType(prop.defaultValue(), field.getType());
-                }
-                out.writeObjectProperty(nameArray[0], value);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new NotMappableException("Reflection error", e);
+        }
+    }
+
+    private void serializeConfigField(ConfigField prop, Field field, PathMapper mapper, WritableNode out) throws InvocationTargetException, IllegalAccessException, IOException {
+        String[] nameArray = prop.name();
+        if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
+            nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
+        }
+        final String getterName = StringHelper.toGetterName(field.getName(), field.getType());
+        Object value;
+        Method getter = tryGetMethod(mapper.getClass(), getterName, field.getType());
+        if (getter != null) {
+            getter.setAccessible(true);
+            value = getter.invoke(mapper);
+        } else {
+            value = field.get(mapper);
+        }
+        if (value == null) {
+            value = ValueHelper.parseValueForType(prop.defaultValue(), field.getType());
+        }
+        out.writeObjectProperty(nameArray[0], value);
+    }
+
+    private void serializeChildField(Child prop, Field field, PathMapper mapper, WritableNode out) throws InvocationTargetException, IllegalAccessException, IOException {
+        String[] nameArray = prop.name();
+        if (nameArray.length == 0 || (nameArray.length == 1 && nameArray[0].length() == 0)) {
+            nameArray = new String[] {StringHelper.toSnakeCase(field.getName())};
+        }
+        final String getterName = StringHelper.toGetterName(field.getName(), field.getType());
+        Method getter = tryGetMethod(mapper.getClass(), getterName, field.getType());
+        PathMapper child;
+        if (getter != null) {
+            getter.setAccessible(true);
+            child = (PathMapper) getter.invoke(mapper);
+        } else {
+            child = (PathMapper) field.get(mapper);
+        }
+        if (child == null && prop.required()) {
+            throw new NotMappableException("Required child mapper " + nameArray[0] + " is not set");
+        }
+        if (child != null) {
+            out.startObject(nameArray[0]);
+            serializeMapper(out, child);
+            out.endObject();
         }
     }
 
