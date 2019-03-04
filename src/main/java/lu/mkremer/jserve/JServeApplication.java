@@ -12,9 +12,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.CSVReader;
+import lu.mkremer.jserve.mappers.GlobMapper;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.mappers.PrefixPathMapper;
+import lu.mkremer.jserve.mappers.RegexMapper;
 import lu.mkremer.jserve.threading.SocketListener;
 import lu.mkremer.jserve.util.MimeContext;
 
@@ -43,6 +47,13 @@ public class JServeApplication {
 
 	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
 		boolean configFromFile = false;
+
+		PathMapperFactory factory = PathMapperFactory.get();
+		factory.registerPathMapper(GlobMapper.class, GlobMapper::new);
+		factory.registerPathMapper(IndexPathMapper.class, IndexPathMapper::new);
+		factory.registerPathMapper(PrefixPathMapper.class, PrefixPathMapper::new);
+		factory.registerPathMapper(RegexMapper.class, RegexMapper::new);
+
 		ServerConfiguration configuration = new ServerConfiguration();
 		configuration.setServePath(System.getProperty("user.dir"));
 		configuration.setMimeSource(ServerConfiguration.DEFAULT_MIME_FILE);
