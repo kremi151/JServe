@@ -5,6 +5,7 @@ import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.registry.JARPluginLoader;
 import lu.mkremer.jserve.registry.PluginRegistry;
 import lu.mkremer.jserve.threading.SocketListener;
 import lu.mkremer.jserve.util.DefaultJServePlugin;
@@ -43,11 +44,13 @@ public class JServeApplication {
 	public static void main(String[] args) throws IOException {
 		boolean configFromFile = false;
 
+		final File pluginsDir = new File("plugins");
+
 		PathMapperFactory factory = PathMapperFactory.get();
 
 		PluginRegistry pluginRegistry = new PluginRegistry();
 		pluginRegistry.registerPlugin(new DefaultJServePlugin());
-		// TODO: Import plugins
+		JARPluginLoader.collectPluginsAt(pluginsDir, pluginRegistry);
 		pluginRegistry.onRegisterMappers(factory);
 
 		ServerConfiguration configuration = new ServerConfiguration();
