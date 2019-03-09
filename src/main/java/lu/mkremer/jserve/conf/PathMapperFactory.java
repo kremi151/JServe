@@ -23,13 +23,11 @@ import java.util.function.Supplier;
 
 public class PathMapperFactory implements PathMapperRegistry {
 
-    private static PathMapperFactory instance = null;
-
     private final HashMap<String, Class<? extends PathMapper>> ID_TO_CLASS = new HashMap<>();
     private final HashMap<Class<? extends PathMapper>, String> CLASS_TO_ID = new HashMap<>();
     private final HashMap<String, Supplier<? extends PathMapper>> ID_TO_FACTORY = new HashMap<>();
 
-    private PathMapperFactory() {}
+    public PathMapperFactory() {}
 
     @Override
     public synchronized <M extends PathMapper> void registerPathMapper(Class<M> clazz, Supplier<M> factory) {
@@ -227,12 +225,5 @@ public class PathMapperFactory implements PathMapperRegistry {
         } catch (NoSuchMethodException e) {
             return null;
         }
-    }
-
-    public static synchronized PathMapperFactory get() {
-        if (instance == null) {
-            instance = new PathMapperFactory();
-        }
-        return instance;
     }
 }

@@ -12,10 +12,16 @@ import java.io.IOException;
 
 public class PathMapperDeserializer extends JsonDeserializer<PathMapper>{
 
+	private final PathMapperFactory factory;
+
+	public PathMapperDeserializer(PathMapperFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	public PathMapper deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		JsonNode node = p.getCodec().readTree(p);
-		return PathMapperFactory.get().parseMapper(node);
+		return factory.parseMapper(node);
 	}
 
 }

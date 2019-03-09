@@ -48,8 +48,7 @@ public class SerializingTest {
     @Tag("fast")
     @Test
     public void deserializationAllSetTest() {
-        PathMapperFactory factory = PathMapperFactory.get();
-        factory.reset();
+        PathMapperFactory factory = new PathMapperFactory();
         factory.registerPathMapper(TestMapper.class, TestMapper::new);
 
         JsonNode json = createTestJson(true);
@@ -76,8 +75,7 @@ public class SerializingTest {
     @Tag("fast")
     @Test
     public void deserializationWithOptionalsTest() {
-        PathMapperFactory factory = PathMapperFactory.get();
-        factory.reset();
+        PathMapperFactory factory = new PathMapperFactory();
         factory.registerPathMapper(TestMapper.class, TestMapper::new);
 
         JsonNode json = createTestJson(false);
@@ -127,8 +125,7 @@ public class SerializingTest {
     @Tag("fast")
     @Test
     public void serializationAllSetTest() throws IOException {
-        PathMapperFactory factory = PathMapperFactory.get();
-        factory.reset();
+        PathMapperFactory factory = new PathMapperFactory();
         factory.registerPathMapper(TestMapper.class, TestMapper::new);
         TestMapper mapper = createTestMapper(true);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -157,8 +154,7 @@ public class SerializingTest {
     @Tag("fast")
     @Test
     public void serializationWithOptionalsTest() throws IOException {
-        PathMapperFactory factory = PathMapperFactory.get();
-        factory.reset();
+        PathMapperFactory factory = new PathMapperFactory();
         factory.registerPathMapper(TestMapper.class, TestMapper::new);
         TestMapper mapper = createTestMapper(false);
         ObjectMapper objectMapper = new ObjectMapper();

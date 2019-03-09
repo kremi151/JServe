@@ -11,10 +11,16 @@ import java.io.IOException;
 
 public class PathMapperSerializer extends JsonSerializer<PathMapper>{
 
+	private final PathMapperFactory factory;
+
+	public PathMapperSerializer(PathMapperFactory factory) {
+		this.factory = factory;
+	}
+
 	@Override
 	public void serialize(PathMapper value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
-		PathMapperFactory.get().serializeMapper(new WritableJsonGeneratorNode(gen), value);
+		this.factory.serializeMapper(new WritableJsonGeneratorNode(gen), value);
 		gen.writeEndObject();
 	}
 

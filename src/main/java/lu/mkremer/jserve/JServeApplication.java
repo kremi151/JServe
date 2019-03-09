@@ -1,10 +1,14 @@
 package lu.mkremer.jserve;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.conf.ServerConfiguration;
+import lu.mkremer.jserve.conf.serializers.PathMapperDeserializer;
+import lu.mkremer.jserve.conf.serializers.PathMapperSerializer;
 import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.mappers.PathMapper;
 import lu.mkremer.jserve.registry.JARPluginLoader;
 import lu.mkremer.jserve.registry.PluginRegistry;
 import lu.mkremer.jserve.threading.SocketListener;
@@ -46,7 +50,11 @@ public class JServeApplication {
 
 		final File pluginsDir = new File("plugins");
 
-		PathMapperFactory factory = PathMapperFactory.get();
+		PathMapperFactory factory = new PathMapperFactory();
+
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(PathMapper.class, new PathMapperSerializer(factory));
+		module.addDeserializer(PathMapper.class, new PathMapperDeserializer(factory));
 
 		PluginRegistry pluginRegistry = new PluginRegistry();
 		pluginRegistry.registerPlugin(new DefaultJServePlugin());
