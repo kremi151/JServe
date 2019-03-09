@@ -133,6 +133,7 @@ public class SerializingTest {
         WritableObjectNode node = new WritableObjectNode(json, objectMapper);
         factory.serializeMapper(node, mapper);
 
+        assertEquals(TYPE_TEST_MAPPER, json.get("type").asText());
         assertEquals("magicA", json.get("custom_prop_a").asText());
         assertEquals("magicB", json.get("custom_prop_b").asText());
         assertEquals("magicC", json.get("custom_prop_c").asText());
@@ -162,6 +163,7 @@ public class SerializingTest {
         WritableObjectNode node = new WritableObjectNode(json, objectMapper);
         factory.serializeMapper(node, mapper);
 
+        assertEquals(TYPE_TEST_MAPPER, json.get("type").asText());
         assertEquals("magicA", json.get("custom_prop_a").asText());
         assertEquals("magicB", json.get("custom_prop_b").asText());
         assertEquals("magicC", json.get("custom_prop_c").asText());

@@ -56,6 +56,9 @@ public class JServeApplication {
 		module.addSerializer(PathMapper.class, new PathMapperSerializer(factory));
 		module.addDeserializer(PathMapper.class, new PathMapperDeserializer(factory));
 
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(module);
+
 		PluginRegistry pluginRegistry = new PluginRegistry();
 		pluginRegistry.registerPlugin(new DefaultJServePlugin());
 		JARPluginLoader.collectPluginsAt(pluginsDir, pluginRegistry);
@@ -79,11 +82,11 @@ public class JServeApplication {
 			} else if (!configFromFile && arg.equals("-t")) {
 				configuration.setMimeSource(args[++i]);
 			} else if (arg.equals("-c")) {
-				configuration = loadConfigFromFile(new File(args[++i]));
+				configuration = loadConfigFromFile(new File(args[++i]), objectMapper);
 				configFromFile = true;
 			} else if (arg.equals("--export-config")) {
 				File destination = new File(args[++i]);
-				saveConfigToFile(configuration, destination);
+				saveConfigToFile(configuration, destination, objectMapper);
 				System.out.println("Configuration file exported to " + destination);
 				return;
 			}
@@ -106,12 +109,12 @@ public class JServeApplication {
 		new JServeApplication(configuration).start();
 	}
 	
-	private static ServerConfiguration loadConfigFromFile(File file) throws IOException {
-		return new ObjectMapper().readValue(file, ServerConfiguration.class);
+	private static ServerConfiguration loadConfigFromFile(File file, ObjectMapper objectMapper) throws IOException {
+		return objectMapper.readValue(file, ServerConfiguration.class);
 	}
 	
-	private static void saveConfigToFile(ServerConfiguration config, File file) throws IOException {
-		new ObjectMapper().writeValue(file, config);
+	private static void saveConfigToFile(ServerConfiguration config, File file, ObjectMapper objectMapper) throws IOException {
+		objectMapper.writeValue(file, config);
 	}
 
 }
