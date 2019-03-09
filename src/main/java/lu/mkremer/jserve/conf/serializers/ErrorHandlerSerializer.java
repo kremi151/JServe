@@ -1,14 +1,13 @@
 package lu.mkremer.jserve.conf.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
 import lu.mkremer.jserve.errorhandling.ErrorHandler;
 import lu.mkremer.jserve.errorhandling.ErrorPageHandler;
 import lu.mkremer.jserve.errorhandling.RedirectErrorHandler;
+
+import java.io.IOException;
 
 public class ErrorHandlerSerializer extends JsonSerializer<ErrorHandler> {
 

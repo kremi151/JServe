@@ -1,9 +1,9 @@
 package lu.mkremer.jserve.errorhandling;
 
-import java.io.IOException;
-
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
+
+import java.io.IOException;
 
 public class RedirectErrorHandler extends AbstractRangedErrorHandler {
 	

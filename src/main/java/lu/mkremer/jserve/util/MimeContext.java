@@ -1,13 +1,13 @@
 package lu.mkremer.jserve.util;
 
+import lu.mkremer.jserve.io.CSVReader;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import lu.mkremer.jserve.io.CSVReader;
 
 public class MimeContext {
 	

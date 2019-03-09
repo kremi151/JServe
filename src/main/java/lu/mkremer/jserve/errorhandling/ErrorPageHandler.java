@@ -1,12 +1,12 @@
 package lu.mkremer.jserve.errorhandling;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
 import lu.mkremer.jserve.threading.SocketResponder;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 public class ErrorPageHandler extends AbstractRangedErrorHandler {
 	

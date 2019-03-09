@@ -1,13 +1,13 @@
 package lu.mkremer.jserve.util;
 
+import lu.mkremer.jserve.util.Request.Method;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import lu.mkremer.jserve.util.Request.Method;
 
 public class RequestParser {
 	

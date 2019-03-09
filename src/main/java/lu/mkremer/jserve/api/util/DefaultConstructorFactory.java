@@ -1,4 +1,4 @@
-package lu.mkremer.jserve.util;
+package lu.mkremer.jserve.api.util;
 
 import lu.mkremer.jserve.exception.NotConstructableException;
 

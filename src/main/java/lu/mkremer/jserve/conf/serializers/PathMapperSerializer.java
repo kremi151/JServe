@@ -1,14 +1,13 @@
 package lu.mkremer.jserve.conf.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
 import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.io.WritableJsonGeneratorNode;
 import lu.mkremer.jserve.mappers.PathMapper;
+
+import java.io.IOException;
 
 public class PathMapperSerializer extends JsonSerializer<PathMapper>{
 

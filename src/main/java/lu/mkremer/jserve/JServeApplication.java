@@ -1,23 +1,21 @@
 package lu.mkremer.jserve;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lu.mkremer.jserve.conf.PathMapperFactory;
+import lu.mkremer.jserve.conf.ServerConfiguration;
+import lu.mkremer.jserve.io.CSVReader;
+import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.registry.PluginRegistry;
+import lu.mkremer.jserve.threading.SocketListener;
+import lu.mkremer.jserve.util.DefaultJServePlugin;
+import lu.mkremer.jserve.util.MimeContext;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lu.mkremer.jserve.conf.PathMapperFactory;
-import lu.mkremer.jserve.conf.ServerConfiguration;
-import lu.mkremer.jserve.io.CSVReader;
-import lu.mkremer.jserve.mappers.GlobMapper;
-import lu.mkremer.jserve.mappers.IndexPathMapper;
-import lu.mkremer.jserve.mappers.PrefixPathMapper;
-import lu.mkremer.jserve.mappers.RegexMapper;
-import lu.mkremer.jserve.threading.SocketListener;
-import lu.mkremer.jserve.util.MimeContext;
 
 public class JServeApplication {
 	
@@ -46,10 +44,11 @@ public class JServeApplication {
 		boolean configFromFile = false;
 
 		PathMapperFactory factory = PathMapperFactory.get();
-		factory.registerPathMapper(GlobMapper.class, GlobMapper::new);
-		factory.registerPathMapper(IndexPathMapper.class, IndexPathMapper::new);
-		factory.registerPathMapper(PrefixPathMapper.class, PrefixPathMapper::new);
-		factory.registerPathMapper(RegexMapper.class, RegexMapper::new);
+
+		PluginRegistry pluginRegistry = new PluginRegistry();
+		pluginRegistry.registerPlugin(new DefaultJServePlugin());
+		// TODO: Import plugins
+		pluginRegistry.onRegisterMappers(factory);
 
 		ServerConfiguration configuration = new ServerConfiguration();
 		configuration.setServePath(System.getProperty("user.dir"));

@@ -1,10 +1,10 @@
 package lu.mkremer.jserve.threading;
 
+import lu.mkremer.jserve.JServeApplication;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import lu.mkremer.jserve.JServeApplication;
 
 public class SocketListener implements Runnable {
 	

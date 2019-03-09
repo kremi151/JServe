@@ -1,23 +1,18 @@
 package lu.mkremer.jserve.threading;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import lu.mkremer.jserve.conf.ServerConfiguration;
+import lu.mkremer.jserve.io.WriteableOutputStream;
+import lu.mkremer.jserve.util.MimeContext;
+import lu.mkremer.jserve.util.Request;
+import lu.mkremer.jserve.util.Request.Method;
+import lu.mkremer.jserve.util.RequestParser;
+
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import lu.mkremer.jserve.conf.ServerConfiguration;
-import lu.mkremer.jserve.io.WriteableOutputStream;
-import lu.mkremer.jserve.util.MimeContext;
-import lu.mkremer.jserve.util.Request;
-import lu.mkremer.jserve.util.RequestParser;
-import lu.mkremer.jserve.util.Request.Method;
 
 public class SocketResponder implements Runnable {
 	

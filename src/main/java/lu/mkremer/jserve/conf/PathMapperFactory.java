@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lu.mkremer.jserve.api.annotation.Child;
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
+import lu.mkremer.jserve.api.registration.PathMapperRegistry;
 import lu.mkremer.jserve.exception.DuplicateEntryException;
 import lu.mkremer.jserve.exception.InvalidConfigurableException;
 import lu.mkremer.jserve.exception.NotMappableException;
 import lu.mkremer.jserve.exception.UnknownIdException;
 import lu.mkremer.jserve.io.WritableNode;
 import lu.mkremer.jserve.mappers.PathMapper;
-import lu.mkremer.jserve.util.DefaultConstructorFactory;
 import lu.mkremer.jserve.util.StringHelper;
 import lu.mkremer.jserve.util.ValueHelper;
 
@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-public class PathMapperFactory {
+public class PathMapperFactory implements PathMapperRegistry {
 
     private static PathMapperFactory instance = null;
 
@@ -31,6 +31,7 @@ public class PathMapperFactory {
 
     private PathMapperFactory() {}
 
+    @Override
     public synchronized <M extends PathMapper> void registerPathMapper(Class<M> clazz, Supplier<M> factory) {
         Configurable configurable = clazz.getAnnotation(Configurable.class);
         if (configurable == null) {
@@ -46,10 +47,6 @@ public class PathMapperFactory {
         ID_TO_CLASS.put(id, clazz);
         CLASS_TO_ID.put(clazz, id);
         ID_TO_FACTORY.put(id, factory);
-    }
-
-    public synchronized <M extends PathMapper> void registerPathMapper(Class<M> clazz) {
-        registerPathMapper(clazz, new DefaultConstructorFactory<>(clazz));
     }
 
     public synchronized void reset() {

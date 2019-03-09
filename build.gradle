@@ -4,6 +4,9 @@ apply plugin: 'eclipse'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+archivesBaseName = 'jserve'
+version = '1.2.0'
+
 repositories {
     mavenCentral()
 }
@@ -25,9 +28,6 @@ sourceSets {
 }
 
 jar {
-    baseName 'jserve'
-    version '1.2.0'
-
     manifest {
         attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
                 'Class-Path': configurations.runtime.files.collect { "$it.name" }.join(' ')
@@ -35,6 +35,19 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+//noinspection GroovyAssignabilityCheck
+task apiJar(type: Jar) {
+    appendix 'api'
+
+    from(sourceSets.main.output) {
+        include "lu/mkremer/jserve/api/**"
+    }
+}
+
+artifacts {
+    archives jar, apiJar
 }
 
 dependencies {

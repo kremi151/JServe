@@ -1,17 +1,16 @@
 package lu.mkremer.jserve.conf.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import lu.mkremer.jserve.errorhandling.ErrorHandler;
 import lu.mkremer.jserve.errorhandling.ErrorPageHandler;
 import lu.mkremer.jserve.errorhandling.RedirectErrorHandler;
 import lu.mkremer.jserve.errorhandling.UnknownErrorHandler;
+
+import java.io.IOException;
 
 public class ErrorHandlerDeserializer extends JsonDeserializer<ErrorHandler> {
 

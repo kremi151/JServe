@@ -1,15 +1,14 @@
 package lu.mkremer.jserve.conf.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import lu.mkremer.jserve.conf.PathMapperFactory;
-import lu.mkremer.jserve.mappers.*;
+import lu.mkremer.jserve.mappers.PathMapper;
+
+import java.io.IOException;
 
 public class PathMapperDeserializer extends JsonDeserializer<PathMapper>{
 

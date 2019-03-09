@@ -1,20 +1,19 @@
 package lu.mkremer.jserve.conf;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
 import lu.mkremer.jserve.errorhandling.DefaultErrorHandler;
 import lu.mkremer.jserve.errorhandling.ErrorHandler;
 import lu.mkremer.jserve.mappers.MapperState;
 import lu.mkremer.jserve.mappers.PathMapper;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @JsonInclude(Include.NON_NULL)
