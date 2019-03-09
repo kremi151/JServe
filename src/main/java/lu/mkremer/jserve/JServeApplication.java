@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lu.mkremer.jserve.conf.PathMapperFactory;
@@ -45,7 +42,7 @@ public class JServeApplication {
 		return configuration;
 	}
 
-	public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
+	public static void main(String[] args) throws IOException {
 		boolean configFromFile = false;
 
 		PathMapperFactory factory = PathMapperFactory.get();
@@ -99,11 +96,11 @@ public class JServeApplication {
 		new JServeApplication(configuration).start();
 	}
 	
-	private static ServerConfiguration loadConfigFromFile(File file) throws JsonParseException, JsonMappingException, IOException {
+	private static ServerConfiguration loadConfigFromFile(File file) throws IOException {
 		return new ObjectMapper().readValue(file, ServerConfiguration.class);
 	}
 	
-	private static void saveConfigToFile(ServerConfiguration config, File file) throws JsonGenerationException, JsonMappingException, IOException {
+	private static void saveConfigToFile(ServerConfiguration config, File file) throws IOException {
 		new ObjectMapper().writeValue(file, config);
 	}
 

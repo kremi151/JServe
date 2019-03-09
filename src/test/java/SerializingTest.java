@@ -45,7 +45,7 @@ public class SerializingTest {
         return json;
     }
 
-    @Tag("slow")
+    @Tag("fast")
     @Test
     public void deserializationAllSetTest() {
         PathMapperFactory factory = PathMapperFactory.get();
@@ -73,7 +73,7 @@ public class SerializingTest {
         assertEquals("valueP", mapper.requiredFieldP);
     }
 
-    @Tag("slow")
+    @Tag("fast")
     @Test
     public void deserializationWithOptionalsTest() {
         PathMapperFactory factory = PathMapperFactory.get();
@@ -124,7 +124,7 @@ public class SerializingTest {
         return mapper;
     }
 
-    @Tag("slow")
+    @Tag("fast")
     @Test
     public void serializationAllSetTest() throws IOException {
         PathMapperFactory factory = PathMapperFactory.get();
@@ -154,7 +154,7 @@ public class SerializingTest {
         assertEquals("magicP", json.get("required_field_p").asText());
     }
 
-    @Tag("slow")
+    @Tag("fast")
     @Test
     public void serializationWithOptionalsTest() throws IOException {
         PathMapperFactory factory = PathMapperFactory.get();
