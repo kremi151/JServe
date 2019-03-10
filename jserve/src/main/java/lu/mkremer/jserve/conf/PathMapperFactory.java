@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lu.mkremer.jserve.api.annotation.Child;
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 import lu.mkremer.jserve.api.registration.PathMapperRegistry;
 import lu.mkremer.jserve.exception.DuplicateEntryException;
 import lu.mkremer.jserve.exception.InvalidConfigurableException;
 import lu.mkremer.jserve.exception.NotMappableException;
 import lu.mkremer.jserve.exception.UnknownIdException;
 import lu.mkremer.jserve.io.WritableNode;
-import lu.mkremer.jserve.api.mapper.PathMapper;
 import lu.mkremer.jserve.util.StringHelper;
 import lu.mkremer.jserve.util.ValueHelper;
 

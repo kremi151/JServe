@@ -2,27 +2,40 @@ package lu.mkremer.jserve;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.conf.serializers.PathMapperDeserializer;
 import lu.mkremer.jserve.conf.serializers.PathMapperSerializer;
 import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
-import lu.mkremer.jserve.api.mapper.PathMapper;
 import lu.mkremer.jserve.registry.JARPluginLoader;
 import lu.mkremer.jserve.registry.PluginRegistry;
 import lu.mkremer.jserve.threading.SocketListener;
 import lu.mkremer.jserve.util.DefaultJServePlugin;
 import lu.mkremer.jserve.util.MimeContext;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class JServeApplication {
+
+	private static final Logger LOGGER;
+
+	static {
+		InputStream stream = JServeApplication.class.getClassLoader().
+				getResourceAsStream("logging.properties");
+		try {
+			LogManager.getLogManager().readConfiguration(stream);
+			LOGGER = Logger.getLogger(JServeApplication.class.getName());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	private final ExecutorService executorService;
 	
@@ -87,7 +100,7 @@ public class JServeApplication {
 			} else if (arg.equals("--export-config")) {
 				File destination = new File(args[++i]);
 				saveConfigToFile(configuration, destination, objectMapper);
-				System.out.println("Configuration file exported to " + destination);
+				LOGGER.log(Level.INFO, "Configuration file exported to {0}", destination);
 				return;
 			}
 		}

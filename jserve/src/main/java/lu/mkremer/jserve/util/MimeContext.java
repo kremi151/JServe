@@ -8,8 +8,12 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MimeContext {
+
+	private static final Logger LOGGER = Logger.getLogger(MimeContext.class.getName());
 	
 	private static MimeContext instance = null;
 
@@ -26,7 +30,7 @@ public class MimeContext {
 			map.put(row[0], row[1]);
 		}
 		extensionsToMimeTypes = Collections.unmodifiableMap(map);
-		System.out.format("Loaded %d mime types\n", map.size());
+		LOGGER.log(Level.INFO, "Loaded {0} mime types", map.size());
 	}
 	
 	public String getFileExtension(String path) {

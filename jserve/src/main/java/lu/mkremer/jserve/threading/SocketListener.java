@@ -5,8 +5,12 @@ import lu.mkremer.jserve.JServeApplication;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketListener implements Runnable {
+
+	private static final Logger LOGGER = Logger.getLogger(SocketListener.class.getName());
 	
 	private final JServeApplication application;
 	
@@ -17,8 +21,8 @@ public class SocketListener implements Runnable {
 	@Override
 	public void run() {
 		try (ServerSocket socket = new ServerSocket(application.getConfiguration().getPort())) {
-			System.out.format("Server listening on port %d\n", application.getConfiguration().getPort());
-			System.out.format("Serve path %s\n", application.getConfiguration().getServePath().toString());
+			LOGGER.log(Level.INFO, "Server listening on port {0}", application.getConfiguration().getPort());
+			LOGGER.log(Level.INFO, "Serve path {0}", application.getConfiguration().getServePath());
 			while (true) {
 				Socket clientSocket = socket.accept();
 				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getConfiguration()));

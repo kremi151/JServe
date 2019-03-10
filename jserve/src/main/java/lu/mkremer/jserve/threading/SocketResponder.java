@@ -13,8 +13,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketResponder implements Runnable {
+
+	private static final Logger LOGGER = Logger.getLogger(SocketResponder.class.getName());
 	
 	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
 
@@ -54,8 +58,8 @@ public class SocketResponder implements Runnable {
 				respondWithError(404, "Not found", request, mappedPath, out);
 				return;
 			}
-			
-			System.out.format("%s 200 %s -> %s (%s:%d)\n", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
+
+			LOGGER.log(Level.INFO, "{0} 200 {1} -> {2} ({3}:{4})", new Object[]{request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort()});
 
 			out.write("HTTP/1.0 200 OK\r\n");
 			serveFile(requestedFile, requestDate, out);
@@ -73,7 +77,7 @@ public class SocketResponder implements Runnable {
 	}
 	
 	private void respondWithError(int code, String status, Request request, String mappedPath, WriteableOutputStream out) throws IOException {
-		System.err.format("%s %d %s -> %s (%s:%d)\n", request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
+		LOGGER.log(Level.WARNING, "{0} {1} {2} -> {3} ({4}:{5})", new Object[]{request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort()});
 		configuration.findErrorHandler(code, mappedPath).respond(code, status, mappedPath, out, configuration);
 	}
 	
