@@ -1,67 +1,11 @@
-apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-archivesBaseName = 'jserve'
-version = '1.2.0'
+ext {
+	jserveName = 'jserve'
+	jserveVersion = '1.2.0'
+}
 
 repositories {
     mavenCentral()
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java/'
-        }
-        resources {
-            srcDir 'src/main/res/'
-        }
-    }
-    test {
-        java {
-            srcDir 'src/test/java/'
-        }
-    }
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
-                'Class-Path': configurations.runtime.files.collect { "$it.name" }.join(' ')
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
-//noinspection GroovyAssignabilityCheck
-task apiJar(type: Jar) {
-    appendix 'api'
-
-    from(sourceSets.main.output) {
-        include "lu/mkremer/jserve/api/**"
-    }
-}
-
-artifacts {
-    archives jar, apiJar
-}
-
-dependencies {
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-}
-
-test {
-    useJUnitPlatform {
-        includeTags 'fast'
-        excludeTags 'slow'
-    }
 }

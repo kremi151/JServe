@@ -1,0 +1,54 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java/'
+        }
+        resources {
+            srcDir 'src/main/res/'
+        }
+    }
+    test {
+        java {
+            srcDir 'src/test/java/'
+        }
+    }
+}
+
+jar {
+	baseName "${rootProject.ext.jserveName}"
+	version "${rootProject.ext.jserveVersion}"
+    manifest {
+        attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
+                'Class-Path': configurations.runtime.files.collect { "$it.name" }.join(' ')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
+	
+	implementation project(':api')
+    testImplementation project(':api')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+    useJUnitPlatform {
+        includeTags 'fast'
+        excludeTags 'slow'
+    }
+}

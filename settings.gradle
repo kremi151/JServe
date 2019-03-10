@@ -1,0 +1,4 @@
+include ':api'
+project(':api').projectDir = new File(rootProject.projectDir, './api')
+include ':jserve'
+project(':jserve').projectDir = new File(rootProject.projectDir, './jserve')
