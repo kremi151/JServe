@@ -2,6 +2,8 @@ package lu.mkremer.jserve.mappers;
 
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
+import lu.mkremer.jserve.api.mapper.PathMapper;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
 
 @Configurable(id = MapperTypes.PATH_MAPPER_PREFIX_ID)
 public class PrefixPathMapper implements PathMapper {

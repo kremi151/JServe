@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import lu.mkremer.jserve.conf.PathMapperFactory;
-import lu.mkremer.jserve.mappers.PathMapper;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 
 import java.io.IOException;
 

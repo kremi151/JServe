@@ -3,9 +3,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lu.mkremer.jserve.api.annotation.ConfigField;
 import lu.mkremer.jserve.api.annotation.Configurable;
+import lu.mkremer.jserve.api.mapper.PathMapper;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
 import lu.mkremer.jserve.conf.PathMapperFactory;
 import lu.mkremer.jserve.io.WritableObjectNode;
-import lu.mkremer.jserve.mappers.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 

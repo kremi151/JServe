@@ -1,5 +1,5 @@
 import lu.mkremer.jserve.mappers.IndexPathMapper;
-import lu.mkremer.jserve.mappers.MapperState;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,6 +1,6 @@
 package lu.mkremer.jserve.api.util;
 
-import lu.mkremer.jserve.exception.NotConstructableException;
+import lu.mkremer.jserve.api.exception.NotConstructableException;
 
 import java.lang.reflect.Constructor;
 import java.util.function.Supplier;

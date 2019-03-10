@@ -1,4 +1,4 @@
-package lu.mkremer.jserve.exception;
+package lu.mkremer.jserve.api.exception;
 
 public class NotConstructableException extends RuntimeException {
 

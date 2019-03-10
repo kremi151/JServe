@@ -1,7 +1,7 @@
 package lu.mkremer.jserve.api.registration;
 
 import lu.mkremer.jserve.api.util.DefaultConstructorFactory;
-import lu.mkremer.jserve.mappers.PathMapper;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 
 import java.util.function.Supplier;
 

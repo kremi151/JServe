@@ -8,7 +8,7 @@ import lu.mkremer.jserve.conf.serializers.PathMapperDeserializer;
 import lu.mkremer.jserve.conf.serializers.PathMapperSerializer;
 import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
-import lu.mkremer.jserve.mappers.PathMapper;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 import lu.mkremer.jserve.registry.JARPluginLoader;
 import lu.mkremer.jserve.registry.PluginRegistry;
 import lu.mkremer.jserve.threading.SocketListener;

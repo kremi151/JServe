@@ -1,4 +1,6 @@
-package lu.mkremer.jserve.mappers;
+package lu.mkremer.jserve.api.mapper;
+
+import lu.mkremer.jserve.api.mapper.state.MapperState;
 
 public interface PathMapper {
 

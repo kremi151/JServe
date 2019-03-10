@@ -1,4 +1,4 @@
-package lu.mkremer.jserve.mappers;
+package lu.mkremer.jserve.api.mapper.state;
 
 public enum MapperState {
 	

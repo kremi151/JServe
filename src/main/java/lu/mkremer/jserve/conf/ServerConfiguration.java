@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lu.mkremer.jserve.errorhandling.DefaultErrorHandler;
 import lu.mkremer.jserve.errorhandling.ErrorHandler;
-import lu.mkremer.jserve.mappers.MapperState;
-import lu.mkremer.jserve.mappers.PathMapper;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
+import lu.mkremer.jserve.api.mapper.PathMapper;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

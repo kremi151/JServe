@@ -1,4 +1,4 @@
-import lu.mkremer.jserve.mappers.MapperState;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
 import lu.mkremer.jserve.mappers.PrefixPathMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

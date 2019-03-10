@@ -1,5 +1,8 @@
 package lu.mkremer.jserve.mappers;
 
+import lu.mkremer.jserve.api.mapper.PathMapper;
+import lu.mkremer.jserve.api.mapper.state.MapperState;
+
 public class UnknownPathMapper implements PathMapper {
 
 	@Override
