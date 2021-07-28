@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import lu.mkremer.jserve.JServeApplication;
+import lu.mkremer.jserve.JServe;
 
 public class SocketListener implements Runnable {
 	
-	private final JServeApplication application;
+	private final JServe application;
 	
-	public SocketListener(JServeApplication application) {
+	public SocketListener(JServe application) {
 		this.application = application;
 	}
 
@@ -18,7 +18,7 @@ public class SocketListener implements Runnable {
 	public void run() {
 		try (ServerSocket socket = new ServerSocket(application.getConfiguration().getPort())) {
 			System.out.format("Server listening on port %d\n", application.getConfiguration().getPort());
-			System.out.format("Serve path %s\n", application.getConfiguration().getServePath().toString());
+			System.out.format("Serve path %s\n", application.getConfiguration().getServePath());
 			while (true) {
 				Socket clientSocket = socket.accept();
 				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getConfiguration()));
