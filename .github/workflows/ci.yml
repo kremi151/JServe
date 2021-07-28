@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ v* ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: ./gradlew build -x test
+      - name: Test
+        run: ./gradlew test
+      - name: Change ownership of build directory
+        run: sudo chown -R $(id -u):$(id -g) ${{ github.workspace }}/build
+      - name: Report test results
+        uses: ashley-taylor/junit-report-annotations-action@master
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          path: "${{ github.workspace }}/build/test-results/test/*.xml"
+        if: always()
