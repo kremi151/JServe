@@ -9,11 +9,18 @@ A file server written in Java
 2. Build using Gradle:  
 `gradle build`
 
-## Run JServe
-### Base command
-You can run JServe using the following command:
+## How to use JServe
+### Serve files
+You can run serve files using the following command:
 
 `java -jar jserve-XXX.jar [options]`
+
+### Create configuration file
+You can create a configuration file with the following command:
+
+`java -jar jserve-XXX.jar export [options] [--pretty] <target path>`
+
+By specifying `--pretty`, the output JSON file will be pretty formatted.
 
 ### Command options
 - `-d <path>`  
@@ -31,5 +38,6 @@ Specifies a comma separated values file of extension-to-mime-type mappings.
 - `-c <path>`  
 Specifies the path of a JSON configuration file to load the configurations from.  
 **Default**: *none*
-- `--export-config <path>`  
-Exports the current configuration to a file at *path* and exits.
+- `-l <level>`  
+Specifies the logging level to use.  
+**Default**: _"info"_
