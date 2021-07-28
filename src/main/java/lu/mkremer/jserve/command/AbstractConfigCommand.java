@@ -27,6 +27,9 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
     @Option(names = {"-t", "--mime-source", "--types"}, description = "The path to a comma separated values file of extension-to-mime-type mappings")
     protected String mimeSource;
 
+    @Option(names = {"-l", "--logging-level"}, description = "Specifies the logging level (e.g. \"trace\", \"debug\", \"info\"")
+    protected String loggingLevel;
+
     @Override
     public final Integer call() throws Exception {
         ServerConfiguration configuration;
@@ -58,6 +61,9 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
         }
         if (mimeSource != null) {
             configuration.setMimeSource(mimeSource);
+        }
+        if (loggingLevel != null) {
+            configuration.setLoggingLevel(loggingLevel);
         }
 
         handleConfig(configuration);
