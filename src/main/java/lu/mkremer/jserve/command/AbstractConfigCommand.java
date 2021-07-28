@@ -3,6 +3,7 @@ package lu.mkremer.jserve.command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
+import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 
 import java.io.File;
@@ -37,6 +38,15 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
             configuration.getPathMappers().add(new IndexPathMapper("index.html"));
         }
 
+        // Set logging level before logging anything
+        if (configuration.getLoggingLevel() != null) {
+            org.tinylog.configuration.Configuration.set("level", configuration.getLoggingLevel());
+        }
+
+        if (configFile != null) {
+            Logger.info("Loaded config from {}", configFile);
+        }
+
         if (port != null) {
             configuration.setPort(port);
         }
@@ -57,7 +67,6 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
     protected abstract void handleConfig(ServerConfiguration config) throws Exception;
 
     private static ServerConfiguration loadConfigFromFile(File file) throws IOException {
-        System.out.println("Load config from " + file);
         return new ObjectMapper().readValue(file, ServerConfiguration.class);
     }
 }

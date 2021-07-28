@@ -5,6 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import lu.mkremer.jserve.JServe;
+import org.tinylog.Logger;
+
+import javax.security.auth.login.Configuration;
 
 public class SocketListener implements Runnable {
 	
@@ -17,8 +20,8 @@ public class SocketListener implements Runnable {
 	@Override
 	public void run() {
 		try (ServerSocket socket = new ServerSocket(application.getConfiguration().getPort())) {
-			System.out.format("Server listening on port %d\n", application.getConfiguration().getPort());
-			System.out.format("Serve path %s\n", application.getConfiguration().getServePath());
+			Logger.info("Server listening on port {}", application.getConfiguration().getPort());
+			Logger.info("Serve path {}", application.getConfiguration().getServePath());
 			while (true) {
 				Socket clientSocket = socket.accept();
 				application.getExecutorService().execute(new SocketResponder(clientSocket, application.getConfiguration()));

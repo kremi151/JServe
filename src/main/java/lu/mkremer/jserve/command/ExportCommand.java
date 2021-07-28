@@ -3,6 +3,7 @@ package lu.mkremer.jserve.command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import lu.mkremer.jserve.conf.ServerConfiguration;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -22,7 +23,7 @@ public class ExportCommand extends AbstractConfigCommand {
     @Override
     protected void handleConfig(ServerConfiguration config) throws Exception {
         saveConfigToFile(config, destination);
-        System.out.println("Configuration file exported to " + destination);
+        Logger.info("Configuration file exported to {}", destination);
     }
 
     private void saveConfigToFile(ServerConfiguration config, File file) throws IOException {

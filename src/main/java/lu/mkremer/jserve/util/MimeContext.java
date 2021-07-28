@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lu.mkremer.jserve.io.CSVReader;
+import org.tinylog.Logger;
 
 public class MimeContext {
 	
@@ -26,7 +27,7 @@ public class MimeContext {
 			map.put(row[0], row[1]);
 		}
 		extensionsToMimeTypes = Collections.unmodifiableMap(map);
-		System.out.format("Loaded %d mime types\n", map.size());
+		Logger.debug("Loaded {} mime types", map.size());
 	}
 	
 	public String getFileExtension(String path) {

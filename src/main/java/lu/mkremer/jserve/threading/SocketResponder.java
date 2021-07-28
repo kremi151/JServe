@@ -18,6 +18,7 @@ import lu.mkremer.jserve.util.MimeContext;
 import lu.mkremer.jserve.util.Request;
 import lu.mkremer.jserve.util.RequestParser;
 import lu.mkremer.jserve.util.Request.Method;
+import org.tinylog.Logger;
 
 public class SocketResponder implements Runnable {
 	
@@ -60,7 +61,7 @@ public class SocketResponder implements Runnable {
 				return;
 			}
 			
-			System.out.format("%s 200 %s -> %s (%s:%d)\n", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
+			Logger.trace("{} 200 {} -> {} ({}:{})", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
 
 			out.write("HTTP/1.0 200 OK\r\n");
 			serveFile(requestedFile, requestDate, out);
@@ -78,7 +79,7 @@ public class SocketResponder implements Runnable {
 	}
 	
 	private void respondWithError(int code, String status, Request request, String mappedPath, WriteableOutputStream out) throws IOException {
-		System.err.format("%s %d %s -> %s (%s:%d)\n", request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
+		Logger.warn("{} {} {} -> {} ({}:{})", request.getMethod().name(), code, request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
 		configuration.findErrorHandler(code, mappedPath).respond(code, status, mappedPath, out, configuration);
 	}
 	

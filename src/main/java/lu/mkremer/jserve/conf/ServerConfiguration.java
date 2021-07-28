@@ -24,6 +24,7 @@ public class ServerConfiguration {
 	public static final int DEFAULT_PORT = 1806;
 	public static final int DEFAULT_MAX_THREADS = 10;
 	public static final String DEFAULT_MIME_FILE = "default";
+	public static final String DEFAULT_LOGGING_LEVEL = "info";
 
 	private Path servePath = Paths.get(DEFAULT_SERVE_PATH);
 	private String mimeSource = DEFAULT_MIME_FILE;
@@ -31,6 +32,7 @@ public class ServerConfiguration {
 	private List<PathMapper> pathMappers = new ArrayList<>();
 	private List<ErrorHandler> errorHandlers = new ArrayList<>();
 	private int maxThreads = DEFAULT_MAX_THREADS;
+	private String loggingLevel = DEFAULT_LOGGING_LEVEL;
 	
 	public ServerConfiguration() {
 		
@@ -87,6 +89,14 @@ public class ServerConfiguration {
 
 	public void setMaxThreads(int maxThreads) {
 		this.maxThreads = maxThreads;
+	}
+
+	public String getLoggingLevel() {
+		return loggingLevel;
+	}
+
+	public void setLoggingLevel(String loggingLevel) {
+		this.loggingLevel = loggingLevel;
 	}
 
 	public String mapPath(String path) {
