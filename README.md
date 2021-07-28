@@ -1,4 +1,6 @@
 # JServe
+[![CI](https://github.com/kremi151/JServe/actions/workflows/ci.yml/badge.svg)](https://github.com/kremi151/JServe/actions/workflows/ci.yml)
+
 A file server written in Java
 
 ## Compile JServe
