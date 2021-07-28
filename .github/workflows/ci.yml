@@ -25,3 +25,8 @@ jobs:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           path: "${{ github.workspace }}/build/test-results/test/*.xml"
         if: always()
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: JServe
+          path: ${{ github.workspace }}/build/libs/*.jar
