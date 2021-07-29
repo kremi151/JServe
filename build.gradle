@@ -4,6 +4,8 @@ apply plugin: 'eclipse'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def jserveVersion='1.2.2'
+
 repositories {
     mavenCentral()
 }
@@ -26,12 +28,13 @@ sourceSets {
 
 jar {
     baseName 'jserve'
-    version '1.2.1'
+    version "$jserveVersion"
 
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     manifest {
-        attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication'
+        attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
+                'Implementation-Version': jserveVersion
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }

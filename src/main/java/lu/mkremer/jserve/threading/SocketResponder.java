@@ -14,6 +14,7 @@ import java.util.Date;
 
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
+import lu.mkremer.jserve.util.BuildVersion;
 import lu.mkremer.jserve.util.MimeContext;
 import lu.mkremer.jserve.util.Request;
 import lu.mkremer.jserve.util.RequestParser;
@@ -89,7 +90,9 @@ public class SocketResponder implements Runnable {
 		out.write("Date: ");
 		out.write(dateFormatter.format(requestDate));
 		out.write("\r\n");
-		out.write("Server: JServe/0.0.1\r\n");
+		out.write("Server: JServe/");
+		out.write(BuildVersion.VERSION);
+		out.write("\r\n");
 		out.write("Content-Type: ");
 		out.write(MimeContext.getInstance().getMimeType(file.toPath()));
 		out.write("\r\n");

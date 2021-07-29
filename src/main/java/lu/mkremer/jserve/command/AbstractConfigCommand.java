@@ -3,6 +3,7 @@ package lu.mkremer.jserve.command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
+import lu.mkremer.jserve.util.BuildVersion;
 import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 
@@ -62,6 +63,7 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
             org.tinylog.configuration.Configuration.set("level", configuration.getLoggingLevel());
         }
 
+        Logger.info("JServe version {}", BuildVersion.VERSION);
         if (configFile != null) {
             Logger.info("Loaded config from {}", configFile);
         }
