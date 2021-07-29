@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -37,43 +38,45 @@ public class SocketResponder implements Runnable {
 	public void run() {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				WriteableOutputStream out = new WriteableOutputStream(new BufferedOutputStream(socket.getOutputStream()))) {
-			
+
 			Request request = RequestParser.parseRequest(reader);
-			
+
 			if (request.getMethod() != Method.GET) {
 				respondWithError(405, "Method not allowed", request, request.getPath(), out);
 				return;
 			}
-			
+
 			Date requestDate = new Date();
-			
+
 			final String mappedPath = configuration.mapPath(request.getPath());
-			
+
 			Path requestedPath = Paths.get(configuration.getServePath(), mappedPath);
 			if (!requestedPath.startsWith(configuration.getServeNioPath())) {
 				respondWithError(406, "Not acceptable", request, mappedPath, out);
 				return;
 			}
-			
+
 			File requestedFile = requestedPath.toFile();
 
 			if (!requestedFile.exists() || requestedFile.isDirectory()) {
 				respondWithError(404, "Not found", request, mappedPath, out);
 				return;
 			}
-			
+
 			Logger.trace("{} 200 {} -> {} ({}:{})", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
 
 			out.write("HTTP/1.0 200 OK\r\n");
 			serveFile(requestedFile, requestDate, out);
 			out.flush();
+		} catch (SocketException e) {
+			Logger.debug(e, "A socket error occurred");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e, "An I/O error occurred");
 		} finally {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.trace(e, "Closing socket failed");
 			}
 		}
 
