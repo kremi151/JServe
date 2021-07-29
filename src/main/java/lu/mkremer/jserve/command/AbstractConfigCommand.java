@@ -41,15 +41,6 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
             configuration.getPathMappers().add(new IndexPathMapper("index.html"));
         }
 
-        // Set logging level before logging anything
-        if (configuration.getLoggingLevel() != null) {
-            org.tinylog.configuration.Configuration.set("level", configuration.getLoggingLevel());
-        }
-
-        if (configFile != null) {
-            Logger.info("Loaded config from {}", configFile);
-        }
-
         if (port != null) {
             configuration.setPort(port);
         }
@@ -64,6 +55,15 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
         }
         if (loggingLevel != null) {
             configuration.setLoggingLevel(loggingLevel);
+        }
+
+        // Set logging level before logging anything
+        if (configuration.getLoggingLevel() != null) {
+            org.tinylog.configuration.Configuration.set("level", configuration.getLoggingLevel());
+        }
+
+        if (configFile != null) {
+            Logger.info("Loaded config from {}", configFile);
         }
 
         handleConfig(configuration);
