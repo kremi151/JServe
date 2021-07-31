@@ -12,7 +12,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 		@JsonSubTypes.Type(value = GlobMapper.class, name = GlobMapper.JSON_TYPE),
 		@JsonSubTypes.Type(value = IndexPathMapper.class, name = IndexPathMapper.JSON_TYPE),
 		@JsonSubTypes.Type(value = PrefixPathMapper.class, name = PrefixPathMapper.JSON_TYPE),
-		@JsonSubTypes.Type(value = ChainMapper.class, name = ChainMapper.JSON_TYPE)
+		@JsonSubTypes.Type(value = ChainMapper.class, name = ChainMapper.JSON_TYPE),
+		@JsonSubTypes.Type(value = FirstMatchingMapper.class, name = FirstMatchingMapper.JSON_TYPE),
+		@JsonSubTypes.Type(value = RegexMapper.class, name = RegexMapper.JSON_TYPE)
 })
 public interface PathMapper {
 
