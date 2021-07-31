@@ -1,6 +1,8 @@
 package lu.mkremer.jserve.mappers;
 
 public class IndexPathMapper implements PathMapper {
+
+	public static final String JSON_TYPE = "index";
 	
 	private String indexFile;
 	
@@ -19,6 +21,11 @@ public class IndexPathMapper implements PathMapper {
 	@Override
 	public String map(String path) {
 		return path + indexFile; 
+	}
+
+	@Override
+	public String getType() {
+		return JSON_TYPE;
 	}
 
 	public String getIndexFile() {

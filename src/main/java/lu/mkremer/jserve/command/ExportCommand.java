@@ -20,6 +20,10 @@ public class ExportCommand extends AbstractConfigCommand {
     @Option(names = {"--pretty"}, description = "Whether to pretty print the exported configuration")
     private boolean pretty = false;
 
+    public ExportCommand(ObjectMapper objectMapper) {
+        super(objectMapper);
+    }
+
     @Override
     protected void handleConfig(ServerConfiguration config) throws Exception {
         saveConfigToFile(config, destination);
@@ -27,7 +31,6 @@ public class ExportCommand extends AbstractConfigCommand {
     }
 
     private void saveConfigToFile(ServerConfiguration config, File file) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter;
         if (pretty) {
             objectWriter = objectMapper.writerWithDefaultPrettyPrinter();

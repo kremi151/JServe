@@ -31,6 +31,12 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
     @Option(names = {"-l", "--logging-level"}, description = "Specifies the logging level (e.g. \"trace\", \"debug\", \"info\"")
     protected String loggingLevel;
 
+    protected final ObjectMapper objectMapper;
+
+    protected AbstractConfigCommand(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public final Integer call() throws Exception {
         ServerConfiguration configuration;
@@ -74,7 +80,7 @@ public abstract class AbstractConfigCommand implements Callable<Integer> {
 
     protected abstract void handleConfig(ServerConfiguration config) throws Exception;
 
-    private static ServerConfiguration loadConfigFromFile(File file) throws IOException {
-        return new ObjectMapper().readValue(file, ServerConfiguration.class);
+    private ServerConfiguration loadConfigFromFile(File file) throws IOException {
+        return objectMapper.readValue(file, ServerConfiguration.class);
     }
 }

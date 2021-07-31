@@ -1,5 +1,6 @@
 package lu.mkremer.jserve.command;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lu.mkremer.jserve.JServe;
 import lu.mkremer.jserve.JServeApplication;
 import lu.mkremer.jserve.conf.ServerConfiguration;
@@ -12,6 +13,10 @@ import java.io.InputStreamReader;
 
 @Command(name = "jserve")
 public class ServeCommand extends AbstractConfigCommand {
+
+    public ServeCommand(ObjectMapper objectMapper) {
+        super(objectMapper);
+    }
 
     @Override
     protected void handleConfig(ServerConfiguration config) throws Exception {

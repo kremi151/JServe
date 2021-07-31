@@ -1,6 +1,8 @@
 package lu.mkremer.jserve.mappers;
 
 public class PrefixPathMapper implements PathMapper {
+
+	public static final String JSON_TYPE = "prefix";
 	
 	private String fromPrefix;
 	private String toPrefix;
@@ -30,6 +32,11 @@ public class PrefixPathMapper implements PathMapper {
 	@Override
 	public String map(String path) {
 		return toPrefix + path.substring(fromPrefix.length());
+	}
+
+	@Override
+	public String getType() {
+		return JSON_TYPE;
 	}
 
 	public String getFromPrefix() {

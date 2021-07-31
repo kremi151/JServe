@@ -1,13 +1,19 @@
 package lu.mkremer.jserve.mappers;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import lu.mkremer.jserve.conf.serializers.PathMapperDeserializer;
-import lu.mkremer.jserve.conf.serializers.PathMapperSerializer;
-
-@JsonSerialize(using = PathMapperSerializer.class)
-@JsonDeserialize(using = PathMapperDeserializer.class)
+@JsonTypeInfo(
+		include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		use = JsonTypeInfo.Id.NAME,
+		property = "type"
+)
+@JsonSubTypes({
+		@JsonSubTypes.Type(value = GlobMapper.class, name = GlobMapper.JSON_TYPE),
+		@JsonSubTypes.Type(value = IndexPathMapper.class, name = IndexPathMapper.JSON_TYPE),
+		@JsonSubTypes.Type(value = PrefixPathMapper.class, name = PrefixPathMapper.JSON_TYPE),
+		@JsonSubTypes.Type(value = ChainMapper.class, name = ChainMapper.JSON_TYPE)
+})
 public interface PathMapper {
 
 	/**
@@ -23,5 +29,7 @@ public interface PathMapper {
 	 * @return
 	 */
 	String map(String path);
+
+	String getType();
 	
 }

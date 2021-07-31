@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 
 public class GlobMapper implements PathMapper {
 
+    public static final String JSON_TYPE = "glob";
+
     private PathMatcher matcher;
     private String pattern;
     private String destination;
@@ -34,6 +36,11 @@ public class GlobMapper implements PathMapper {
     @Override
     public String map(String path) {
         return destination;
+    }
+
+    @Override
+    public String getType() {
+        return JSON_TYPE;
     }
 
     public String getGlobMatcher() {
