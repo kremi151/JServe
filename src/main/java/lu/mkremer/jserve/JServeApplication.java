@@ -17,7 +17,9 @@ public class JServeApplication {
 		cli.addSubcommand(new ExportCommand(objectMapper));
 
 		int exitCode = cli.execute(args);
-		System.exit(exitCode);
+		if (exitCode != 0) {
+			System.exit(exitCode);
+		}
 	}
 
 }
