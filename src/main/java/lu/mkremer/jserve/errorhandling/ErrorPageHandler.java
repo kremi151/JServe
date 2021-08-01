@@ -9,6 +9,8 @@ import lu.mkremer.jserve.io.WriteableOutputStream;
 import lu.mkremer.jserve.threading.SocketResponder;
 
 public class ErrorPageHandler extends AbstractRangedErrorHandler {
+
+	public static final String JSON_TYPE = "page";
 	
 	private String path;
 
@@ -29,6 +31,11 @@ public class ErrorPageHandler extends AbstractRangedErrorHandler {
 		}
 		out.write("\r\n");
 		SocketResponder.serveFile(file, new Date(), out);
+	}
+
+	@Override
+	public String getType() {
+		return JSON_TYPE;
 	}
 
 	public String getPath() {

@@ -6,6 +6,8 @@ import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
 
 public class RedirectErrorHandler extends AbstractRangedErrorHandler {
+
+	public static final String JSON_TYPE = "redirect";
 	
 	private String redirect;
 
@@ -15,6 +17,11 @@ public class RedirectErrorHandler extends AbstractRangedErrorHandler {
 		out.write("Location: ");
 		out.write(redirect);
 		out.write("\r\n");
+	}
+
+	@Override
+	public String getType() {
+		return JSON_TYPE;
 	}
 
 	public String getRedirect() {

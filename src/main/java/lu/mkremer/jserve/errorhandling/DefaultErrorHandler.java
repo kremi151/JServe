@@ -6,6 +6,8 @@ import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.io.WriteableOutputStream;
 
 public class DefaultErrorHandler implements ErrorHandler {
+
+	public static final String JSON_TYPE = "default";
 	
 	@Override
 	public boolean canHandle(int errorCode, String path) {
@@ -21,6 +23,11 @@ public class DefaultErrorHandler implements ErrorHandler {
 			out.write(status);
 		}
 		out.write("\r\n");
+	}
+
+	@Override
+	public String getType() {
+		return JSON_TYPE;
 	}
 
 }
