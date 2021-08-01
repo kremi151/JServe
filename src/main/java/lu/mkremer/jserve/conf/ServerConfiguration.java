@@ -17,7 +17,7 @@ import lu.mkremer.jserve.mappers.PathMapper;
 @JsonInclude(Include.NON_NULL)
 public class ServerConfiguration {
 	
-	public static final String DEFAULT_SERVE_PATH = "/";
+	public static final String DEFAULT_SERVE_PATH = System.getProperty("user.dir");
 	public static final int DEFAULT_PORT = 1806;
 	public static final int DEFAULT_MAX_THREADS = 10;
 	public static final String DEFAULT_MIME_FILE = "default";
