@@ -3,7 +3,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-def jserveVersion='1.2.2'
+def jserveVersion='1.2.3'
 
 repositories {
     mavenCentral()
