@@ -1,6 +1,5 @@
 plugins {
   id 'java-library'
-   // id 'org.graalvm.buildtools.native' version '0.9.4'
 }
 
 sourceCompatibility = 1.8
@@ -18,14 +17,14 @@ jar {
 }
 
 dependencies {
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.4'
-    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: libJacksonVersion
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: libJacksonVersion
 
-    api group: 'org.tinylog', name: 'tinylog-api', version: '2.3.2'
-    implementation group: 'org.tinylog', name: 'tinylog-impl', version: '2.3.2'
+    api group: 'org.tinylog', name: 'tinylog-api', version: libTinylogVersion
+    implementation group: 'org.tinylog', name: 'tinylog-impl', version: libTinylogVersion
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: libJunitVersion
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: libJunitVersion
 }
 
 test {
