@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+  id 'java'
+  id 'org.graalvm.buildtools.native' version '0.9.4'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
