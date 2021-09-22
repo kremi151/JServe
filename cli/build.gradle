@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName 'jserve-cli'
+    version rootProject.ext.jserveVersion
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'lu.mkremer.jserve.cli.JServeCLIApplication',
+                'Implementation-Version': rootProject.ext.jserveVersion
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    implementation project(':core')
+
+    implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
+}

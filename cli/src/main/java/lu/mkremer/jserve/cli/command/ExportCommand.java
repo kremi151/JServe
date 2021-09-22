@@ -1,4 +1,4 @@
-package lu.mkremer.jserve.command;
+package lu.mkremer.jserve.cli.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

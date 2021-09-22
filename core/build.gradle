@@ -1,12 +1,10 @@
 plugins {
-  id 'java'
-  id 'org.graalvm.buildtools.native' version '0.9.4'
+  id 'java-library'
+   // id 'org.graalvm.buildtools.native' version '0.9.4'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-def jserveVersion='1.2.3'
 
 repositories {
     mavenCentral()
@@ -14,25 +12,16 @@ repositories {
 
 jar {
     baseName 'jserve'
-    version "$jserveVersion"
+    version rootProject.ext.jserveVersion
 
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-
-    manifest {
-        attributes 'Main-Class': 'lu.mkremer.jserve.JServeApplication',
-                'Implementation-Version': jserveVersion
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
 
 dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.4'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
-    implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
 
-    implementation group: 'org.tinylog', name: 'tinylog-api', version: '2.3.2'
+    api group: 'org.tinylog', name: 'tinylog-api', version: '2.3.2'
     implementation group: 'org.tinylog', name: 'tinylog-impl', version: '2.3.2'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'

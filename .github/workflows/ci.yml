@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
-        run: ./gradlew :core:build -x test
+        run: ./gradlew :cli:build -x test
       - name: Test
         run: ./gradlew :core:test
       - name: Change ownership of build directory
@@ -29,4 +29,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: JServe
-          path: ${{ github.workspace }}/core/build/libs/*.jar
+          path: ${{ github.workspace }}/cli/build/libs/*.jar

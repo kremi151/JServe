@@ -1,13 +1,12 @@
-package lu.mkremer.jserve;
+package lu.mkremer.jserve.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import lu.mkremer.jserve.command.ExportCommand;
-import lu.mkremer.jserve.command.ServeCommand;
-
+import lu.mkremer.jserve.cli.command.ExportCommand;
+import lu.mkremer.jserve.cli.command.ServeCommand;
 import picocli.CommandLine;
 
-public class JServeApplication {
+public class JServeCLIApplication {
 
 	public static void main(String[] args) {
 		ObjectMapper objectMapper = new ObjectMapper()
