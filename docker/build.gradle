@@ -19,6 +19,7 @@ nativeBuild {
         languageVersion = JavaLanguageVersion.of(8)
         vendor = JvmVendorSpec.matching("GraalVM")
     }
+    buildArgs.add('-H:+ReportExceptionStackTraces')
 }
 
 dependencies {
