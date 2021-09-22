@@ -17,13 +17,13 @@ jobs:
         run: ./gradlew :cli:shadowJar -x test
       - name: Test
         run: ./gradlew :core:test
-      - name: Change ownership of build directory
-        run: sudo chown -R $(id -u):$(id -g) ${{ github.workspace }}/build
+      - name: Change ownership of core build directory
+        run: sudo chown -R $(id -u):$(id -g) ${{ github.workspace }}/core/build
       - name: Report test results
         uses: ashley-taylor/junit-report-annotations-action@master
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
-          path: "${{ github.workspace }}/build/test-results/test/*.xml"
+          path: "${{ github.workspace }}/core/build/test-results/test/*.xml"
         if: always()
       - uses: ayltai/setup-graalvm@v1
         with:
