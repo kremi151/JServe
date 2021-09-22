@@ -31,7 +31,7 @@ jobs:
           graalvm-version: 21.1.0
           native-image: true
       - name: Build Docker image
-        run: ./gradlew :docker:nativeBuild -x test
+        run: ./gradlew --info :docker:nativeBuild -x test
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
