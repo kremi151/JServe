@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'org.graalvm.buildtools.native' version '0.9.4'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+nativeBuild {
+    imageName = "jserve"
+    mainClass = "lu.mkremer.jserve.docker.JServeDockerApplication"
+    verbose = true
+    fallback = false
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(8)
+        vendor = JvmVendorSpec.matching("GraalVM")
+    }
+}
+
+dependencies {
+    implementation project(':core')
+}
