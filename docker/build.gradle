@@ -19,6 +19,7 @@ nativeBuild {
     mainClass = "lu.mkremer.jserve.docker.JServeDockerApplication"
     verbose = true
     fallback = false
+    useFatJar = true
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(8)
         vendor = JvmVendorSpec.matching("GraalVM")
