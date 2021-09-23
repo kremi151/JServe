@@ -25,6 +25,7 @@ nativeBuild {
         vendor = JvmVendorSpec.matching("GraalVM")
     }
     buildArgs.add('-H:+ReportExceptionStackTraces')
+    buildArgs.add('--allow-incomplete-classpath')
 }
 
 dependencies {
