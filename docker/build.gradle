@@ -15,7 +15,7 @@ configurations.implementation {
 }
 
 nativeBuild {
-    imageName = "kremi151/jserve"
+    imageName = "jserve"
     mainClass = "lu.mkremer.jserve.docker.JServeDockerApplication"
     verbose = true
     fallback = false
@@ -26,6 +26,7 @@ nativeBuild {
     }
     buildArgs.add('-H:+ReportExceptionStackTraces')
     buildArgs.add('--allow-incomplete-classpath')
+    buildArgs.add('--static')
 }
 
 dependencies {
