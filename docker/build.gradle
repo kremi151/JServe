@@ -15,7 +15,7 @@ configurations.implementation {
 }
 
 nativeBuild {
-    imageName = "jserve"
+    imageName = "kremi151/jserve"
     mainClass = "lu.mkremer.jserve.docker.JServeDockerApplication"
     verbose = true
     fallback = false

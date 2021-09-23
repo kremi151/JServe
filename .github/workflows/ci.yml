@@ -37,3 +37,10 @@ jobs:
         with:
           name: JServe
           path: ${{ github.workspace }}/cli/build/libs/*.jar
+      - name: Docker login
+        run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push Docker image
+        run: docker push kremi151/jserve:latest
