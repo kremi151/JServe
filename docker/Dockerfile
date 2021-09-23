@@ -1,5 +1,6 @@
 FROM scratch
 
-COPY build/native/nativeBuild/jserve /opt/jserve
+COPY assets/index.html /opt/jserve/files/
+COPY build/native/nativeBuild/jserve /opt/jserve/jserve
 
-CMD ["/opt/jserve"]
+CMD ["/opt/jserve/jserve"]
