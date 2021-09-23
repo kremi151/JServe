@@ -28,7 +28,7 @@ jobs:
       - uses: ayltai/setup-graalvm@v1
         with:
           java-version: 8
-          graalvm-version: 21.1.0
+          graalvm-version: 21.2.0
           native-image: true
       - name: Build Docker image
         run: ./gradlew --info :docker:nativeBuild -x test
