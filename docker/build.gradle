@@ -10,6 +10,10 @@ repositories {
     mavenCentral()
 }
 
+configurations.implementation {
+    exclude group: 'org.graalvm.buildtools', module: 'junit-platform-native'
+}
+
 nativeBuild {
     imageName = "jserve"
     mainClass = "lu.mkremer.jserve.docker.JServeDockerApplication"
