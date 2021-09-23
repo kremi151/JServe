@@ -1,10 +1,15 @@
 package lu.mkremer.jserve;
 
 import lu.mkremer.jserve.conf.ServerConfiguration;
+import lu.mkremer.jserve.io.CSVReader;
 import lu.mkremer.jserve.threading.SocketListener;
 import lu.mkremer.jserve.threading.SocketResponder;
+import lu.mkremer.jserve.util.MimeContext;
 import org.tinylog.Logger;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,8 +26,22 @@ public class JServe {
         this.executorService = Executors.newFixedThreadPool(configuration.getMaxThreads());
     }
 
-    public void start() {
+    public void start() throws IOException {
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdownThreads));
+
+        CSVReader csvReader;
+        if (configuration.getMimeSource() == null || configuration.getMimeSource().equals(ServerConfiguration.DEFAULT_MIME_FILE)) {
+            ClassLoader classLoader = JServe.class.getClassLoader();
+            csvReader = new CSVReader(new InputStreamReader(classLoader.getResourceAsStream("mime/types.csv")));
+        } else {
+            csvReader = new CSVReader(new FileReader(configuration.getMimeSource()));
+        }
+
+        try {
+            MimeContext.getInstance().loadMimeTypes(csvReader);
+        } finally {
+            csvReader.close();
+        }
 
         new SocketListener(this).run();
     }

@@ -4,13 +4,14 @@ import lu.mkremer.jserve.JServe;
 import lu.mkremer.jserve.conf.ServerConfiguration;
 import lu.mkremer.jserve.mappers.IndexPathMapper;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class JServeDockerApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Path rootPath = Paths.get("/", "opt", "jserve");
 		Path filesPath = rootPath.resolve("files");
 
@@ -23,6 +24,7 @@ public class JServeDockerApplication {
 		ServerConfiguration config = new ServerConfiguration();
 		config.getPathMappers().add(new IndexPathMapper("index.html"));
 		config.setServePath(filesPath.toString());
+		config.setMimeSource(rootPath.resolve("types.csv").toString());
 		if (portStr != null && !portStr.isEmpty()) {
 			config.setPort(Integer.parseInt(portStr));
 		}
