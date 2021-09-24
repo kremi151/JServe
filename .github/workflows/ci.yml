@@ -25,11 +25,6 @@ jobs:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           path: "${{ github.workspace }}/core/build/test-results/test/*.xml"
         if: always()
-      - uses: ayltai/setup-graalvm@v1
-        with:
-          java-version: 8
-          graalvm-version: 21.2.0
-          native-image: true
       - name: Build Docker image
         run: ./scripts/build-docker.sh
       #- name: Upload artifact
