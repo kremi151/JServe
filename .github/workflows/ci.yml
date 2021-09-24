@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master, multistage ]
+    branches: [ master ]
     tags: [ v* ]
   pull_request:
     branches: [ master ]
@@ -27,15 +27,18 @@ jobs:
         if: always()
       - name: Build Docker image
         run: ./scripts/build-docker.sh
-      #- name: Upload artifact
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: JServe
-      #    path: ${{ github.workspace }}/cli/build/libs/*.jar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: JServe
+          path: ${{ github.workspace }}/cli/build/libs/*.jar
+        if: ${{ github.event_name != 'pull_request' }}
       - name: Docker login
         run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      #- name: Push Docker image
-      #  run: docker push kremi151/jserve:latest
+        if: ${{ github.event_name != 'pull_request' }}
+      - name: Push Docker image
+        run: docker push kremi151/jserve:latest
+        if: ${{ github.event_name != 'pull_request' }}
