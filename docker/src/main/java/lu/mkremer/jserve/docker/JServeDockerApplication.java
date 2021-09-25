@@ -12,9 +12,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
+import sun.misc.Signal;
+
 public class JServeDockerApplication {
 
 	public static void main(String[] args) throws IOException {
+		Signal.handle(new Signal("INT"), sig -> System.exit(0));
+
 		Path rootPath = Paths.get("/", "opt", "jserve");
 
 		try (InputStream inputStream = Files.newInputStream(rootPath.resolve("tinylog.properties"), StandardOpenOption.READ)) {
