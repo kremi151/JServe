@@ -8,13 +8,12 @@ on:
     branches: [ master ]
 
 jobs:
-  ci:
+  core:
+    name: Test core
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build CLI application
-        run: ./gradlew :cli:shadowJar -x test
       - name: Test
         run: ./gradlew :core:test
       - name: Change ownership of core build directory
@@ -25,22 +24,38 @@ jobs:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           path: "${{ github.workspace }}/core/build/test-results/test/*.xml"
         if: always()
-      - uses: ayltai/setup-graalvm@v1
-        with:
-          java-version: 8
-          graalvm-version: 21.2.0
-          native-image: true
-      - name: Build Docker image
-        run: ./scripts/build-docker.sh
+
+  cli:
+    name: Build CLI app
+    runs-on: ubuntu-latest
+    needs: [core]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build CLI application
+        run: ./gradlew :cli:shadowJar -x test
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: JServe
           path: ${{ github.workspace }}/cli/build/libs/*.jar
+        if: ${{ github.event_name != 'pull_request' }}
+
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    needs: [core]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build Docker image
+        run: ./scripts/build-docker.sh
       - name: Docker login
         run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        if: ${{ github.event_name != 'pull_request' }}
       - name: Push Docker image
         run: docker push kremi151/jserve:latest
+        if: ${{ github.event_name != 'pull_request' }}

@@ -25,6 +25,7 @@ nativeBuild {
         vendor = JvmVendorSpec.matching("GraalVM")
     }
     buildArgs.add('-H:+ReportExceptionStackTraces')
+    buildArgs.add("-H:ReflectionConfigurationFiles=${project.projectDir}/reflection_config.json")
     buildArgs.add('--allow-incomplete-classpath')
     buildArgs.add('--static')
 }

@@ -1,0 +1,7 @@
+[
+  {
+    "name" : "org.tinylog.writers.ConsoleWriter",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true
+  }
+]
