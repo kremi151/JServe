@@ -32,17 +32,24 @@ public class JServeDockerApplication {
 			throw new IllegalStateException("No readable volume mounted at " + filesPath);
 		}
 
-		String portStr = System.getenv("JSERVE_PORT");
-
 		ServerConfiguration config = new ServerConfiguration();
 		config.getPathMappers().add(new IndexPathMapper("index.html"));
 		config.setServePath(filesPath.toString());
 		config.setMimeSource(rootPath.resolve("types.csv").toString());
-		if (portStr != null && !portStr.isEmpty()) {
-			config.setPort(Integer.parseInt(portStr));
-		}
+		configure(config);
 
 		new JServe(config).start();
+	}
+
+	private static void configure(ServerConfiguration config) {
+		String value = System.getenv("JSERVE_PORT");
+		if (value != null && !value.isEmpty()) {
+			config.setPort(Integer.parseInt(value));
+		}
+		value = System.getenv("JSERVE_MAX_THREADS");
+		if (value != null && !value.isEmpty()) {
+			config.setMaxThreads(Integer.parseInt(value));
+		}
 	}
 
 }
