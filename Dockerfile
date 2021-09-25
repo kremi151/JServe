@@ -10,6 +10,7 @@ FROM scratch
 
 COPY docker/assets/index.html /opt/jserve/files/
 COPY core/src/main/resources/mime/types.csv /opt/jserve/types.csv
+COPY core/src/main/resources/tinylog.properties /opt/jserve/tinylog.properties
 COPY --from=graalvm /workspace/docker/build/native/nativeBuild/jserve /opt/jserve/jserve
 
 CMD ["/opt/jserve/jserve"]
