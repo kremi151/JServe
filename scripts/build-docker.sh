@@ -50,8 +50,8 @@ else
 
     echo "Publishing multi-platform images"
     docker manifest create kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_AMENDS}
-    docker push kremi151/jserve:${JSERVE_VERSION}
+    docker manifest push kremi151/jserve:${JSERVE_VERSION}
 
-    docker tag kremi151/jserve:${JSERVE_VERSION} kremi151/jserve:latest
-    docker push kremi151/jserve:latest
+    docker manifest create kremi151/jserve:latest${JSERVE_MANIFEST_AMENDS}
+    docker manifest push kremi151/jserve:latest
 fi
