@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # For debugging purposes
+set -x
 echo "Is release build? ${JSERVE_IS_RELEASE}"
 
 if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
@@ -8,5 +9,5 @@ if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
     docker build -t kremi151/jserve:latest .
 else
     echo "Build Docker image using buildx"
-    docker buildx build --platform $JSERVE_BUILDX_PLATFORMS --tag kremi151/jserve:latest
+    docker buildx build --platform $JSERVE_BUILDX_PLATFORMS --tag kremi151/jserve:latest .
 fi
