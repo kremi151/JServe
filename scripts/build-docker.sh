@@ -20,8 +20,9 @@ if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
 else
     JSERVE_MANIFEST_SOURCES=""
 
+    OLD_IFS="$IFS"
     IFS=","
-    for JSERVE_BUILDX_PLATFORM in "$JSERVE_BUILDX_PLATFORMS"; do
+    for JSERVE_BUILDX_PLATFORM in $JSERVE_BUILDX_PLATFORMS; do
         echo "Build image for platform ${JSERVE_BUILDX_PLATFORM}"
 
         JSERVE_INTERMEDIATE_TAG="platform-${JSERVE_BUILDX_PLATFORM//\//_}"
@@ -30,6 +31,7 @@ else
 
         JSERVE_MANIFEST_SOURCES="${JSERVE_MANIFEST_SOURCES} kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
     done
+    IFS="$OLD_IFS"
 
     if [[ "${JSERVE_PUBLISH:-}" != "true" ]]; then
         JSERVE_MANIFEST_SOURCES=" --dry-run${JSERVE_MANIFEST_SOURCES}"
