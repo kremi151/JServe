@@ -10,7 +10,7 @@ if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
 else
     echo "Build Docker image using buildx"
 
-    JSERVE_BUILDX_ARGS="--tag kremi151/jserve:latest"
+    JSERVE_BUILDX_ARGS="--memory 1g --tag kremi151/jserve:latest"
 
     if [[ "${JSERVE_PUBLISH:-}" == "true" ]]; then
         JSERVE_BUILDX_ARGS="${JSERVE_BUILDX_ARGS} --push"
