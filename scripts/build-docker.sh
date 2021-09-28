@@ -28,9 +28,13 @@ else
     for JSERVE_BUILDX_PLATFORM in $JSERVE_BUILDX_PLATFORMS; do
         echo "Build image for platform ${JSERVE_BUILDX_PLATFORM}"
 
-        JSERVE_INTERMEDIATE_TAG="platform-${JSERVE_BUILDX_PLATFORM//\//_}"
+        JSERVE_INTERMEDIATE_TAG="${JSERVE_VERSION}-${JSERVE_BUILDX_PLATFORM//\//_}"
 
         docker buildx build --platform $JSERVE_BUILDX_PLATFORM -o type=docker --tag kremi151/jserve:${JSERVE_INTERMEDIATE_TAG} .
+        
+        if [[ "${JSERVE_PUBLISH:-}" == "true" ]]; then
+            docker push kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}
+        fi
 
         JSERVE_MANIFEST_AMENDS="${JSERVE_MANIFEST_AMENDS} --amend kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
     done
