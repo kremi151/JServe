@@ -3,3 +3,9 @@ buildscript {
         jserveVersion = '1.2.3'
     }
 }
+
+task printVersion() {
+	doLast {
+		println "${project.ext.jserveVersion}"
+	}
+}
