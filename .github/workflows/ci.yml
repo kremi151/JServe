@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [ master ]
-    tags: [ v* ]
   pull_request:
     branches: [ master ]
 
@@ -58,8 +57,14 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         if: ${{ github.event_name != 'pull_request' }}
+      - name: Build Docker image for current platform without publishing
+        run: ./scripts/build-docker.sh
+        env:
+          JSERVE_PUBLISH: false
+        if: ${{ github.event_name == 'pull_request' }}
       - name: Build and publish Docker image
         run: ./scripts/build-docker.sh
         env:
-          JSERVE_PUBLISH: ${{ github.event_name != 'pull_request' }}
+          JSERVE_PUBLISH: true
           JSERVE_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+        if: ${{ github.event_name != 'pull_request' }}
