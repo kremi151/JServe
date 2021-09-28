@@ -37,6 +37,8 @@ else
         JSERVE_MANIFEST_SOURCES=" --dry-run${JSERVE_MANIFEST_SOURCES}"
     fi
 
+    docker buildx imagetools inspect kremi151/jserve
+
     docker buildx imagetools create -t kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_SOURCES}
     docker buildx imagetools create -t kremi151/jserve:latest${JSERVE_MANIFEST_SOURCES}
 fi
