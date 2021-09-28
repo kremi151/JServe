@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Give Gradle wrapper the chance to be downloaded first in order to not pollute the JSERVE_VERSION VARIABLE
+./gradlew --version
+
 JSERVE_VERSION=$(./gradlew printVersion -q)
 
 echo "JServe version is ${JSERVE_VERSION}"
