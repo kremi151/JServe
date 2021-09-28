@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Debugging
+set -x
+
 # Give Gradle wrapper the chance to be downloaded first in order to not pollute the JSERVE_VERSION VARIABLE
 ./gradlew --version
 
@@ -37,6 +40,9 @@ else
         echo "Skip publishing"
         exit 0
     fi
+
+    echo "List local images"
+    docker image ls
 
     echo "Publishing multi-platform images"
     docker manifest create kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_AMENDS}
