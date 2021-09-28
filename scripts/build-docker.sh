@@ -18,14 +18,22 @@ if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
         docker push kremi151/jserve:latest
     fi
 else
-    JSERVE_BUILDX_ARGS="--memory 1g --tag kremi151/jserve:latest --tag kremi151/jserve:${JSERVE_VERSION}"
+    JSERVE_MANIFEST_SOURCES=""
 
-    if [[ "${JSERVE_PUBLISH:-}" == "true" ]]; then
-        echo "Build and publish Docker image using buildx"
-        JSERVE_BUILDX_ARGS="${JSERVE_BUILDX_ARGS} --push"
-    else
-        echo "Build Docker image using buildx"
+    while IFS="," read -r JSERVE_BUILDX_PLATFORM; do
+        echo "Build image for platform ${JSERVE_BUILDX_PLATFORM}"
+
+        JSERVE_INTERMEDIATE_TAG="platform-${JSERVE_BUILDX_PLATFORM//\//_}"
+
+        docker buildx build --platform $JSERVE_BUILDX_PLATFORM --tag kremi151/jserve:${JSERVE_INTERMEDIATE_TAG} .
+
+        JSERVE_MANIFEST_SOURCES="${JSERVE_MANIFEST_SOURCES} kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
+    done <<< "$JSERVE_BUILDX_PLATFORMS"
+
+    if [[ "${JSERVE_PUBLISH:-}" != "true" ]]; then
+        JSERVE_MANIFEST_SOURCES=" --dry-run${JSERVE_MANIFEST_SOURCES}"
     fi
 
-    docker buildx build --platform $JSERVE_BUILDX_PLATFORMS $JSERVE_BUILDX_ARGS .
+    docker buildx imagetools create -t kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_SOURCES}
+    docker buildx imagetools create -t kremi151/jserve:latest${JSERVE_MANIFEST_SOURCES}
 fi
