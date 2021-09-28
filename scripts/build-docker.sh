@@ -18,7 +18,7 @@ if [ -z "${JSERVE_BUILDX_PLATFORMS:-}" ]; then
         docker push kremi151/jserve:latest
     fi
 else
-    JSERVE_MANIFEST_SOURCES=""
+    JSERVE_MANIFEST_AMENDS=""
 
     OLD_IFS="$IFS"
     IFS=","
@@ -29,17 +29,19 @@ else
 
         docker buildx build --platform $JSERVE_BUILDX_PLATFORM -o type=docker --tag kremi151/jserve:${JSERVE_INTERMEDIATE_TAG} .
 
-        JSERVE_MANIFEST_SOURCES="${JSERVE_MANIFEST_SOURCES} kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
+        JSERVE_MANIFEST_AMENDS="${JSERVE_MANIFEST_AMENDS} --amend kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
     done
     IFS="$OLD_IFS"
 
     if [[ "${JSERVE_PUBLISH:-}" != "true" ]]; then
-        JSERVE_MANIFEST_SOURCES=" --dry-run${JSERVE_MANIFEST_SOURCES}"
+        echo "Skip publishing"
+        exit 0
     fi
 
-    docker image ls
-    docker buildx imagetools inspect kremi151/jserve
+    echo "Publishing multi-platform images"
+    docker manifest create kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_AMENDS}
+    docker tag kremi151/jserve:${JSERVE_VERSION} kremi151/jserve:latest
 
-    docker buildx imagetools create -t kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_SOURCES}
-    docker buildx imagetools create -t kremi151/jserve:latest${JSERVE_MANIFEST_SOURCES}
+    docker push kremi151/jserve:${JSERVE_VERSION}
+    docker push kremi151/jserve:latest
 fi
