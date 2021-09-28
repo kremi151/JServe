@@ -61,5 +61,5 @@ jobs:
       - name: Build and publish Docker image
         run: ./scripts/build-docker.sh
         env:
-          JSERVE_IS_RELEASE: ${{ github.event_name != 'pull_request' }}
+          JSERVE_PUBLISH: ${{ github.event_name != 'pull_request' }}
           JSERVE_BUILDX_PLATFORMS: linux/amd64,linux/arm64
