@@ -62,4 +62,4 @@ jobs:
         run: ./scripts/build-docker.sh
         env:
           JSERVE_PUBLISH: ${{ github.event_name != 'pull_request' }}
-          JSERVE_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/armv7
+          JSERVE_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
