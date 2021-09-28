@@ -27,7 +27,7 @@ else
 
         JSERVE_INTERMEDIATE_TAG="platform-${JSERVE_BUILDX_PLATFORM//\//_}"
 
-        docker buildx build --platform $JSERVE_BUILDX_PLATFORM --tag kremi151/jserve:${JSERVE_INTERMEDIATE_TAG} .
+        docker buildx build --platform $JSERVE_BUILDX_PLATFORM -o type=docker --tag kremi151/jserve:${JSERVE_INTERMEDIATE_TAG} .
 
         JSERVE_MANIFEST_SOURCES="${JSERVE_MANIFEST_SOURCES} kremi151/jserve:${JSERVE_INTERMEDIATE_TAG}"
     done
@@ -37,6 +37,7 @@ else
         JSERVE_MANIFEST_SOURCES=" --dry-run${JSERVE_MANIFEST_SOURCES}"
     fi
 
+    docker image ls
     docker buildx imagetools inspect kremi151/jserve
 
     docker buildx imagetools create -t kremi151/jserve:${JSERVE_VERSION}${JSERVE_MANIFEST_SOURCES}
