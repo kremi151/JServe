@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        jserveVersion = '1.2.3'
+        jserveVersion = '1.2.4'
     }
 }
 

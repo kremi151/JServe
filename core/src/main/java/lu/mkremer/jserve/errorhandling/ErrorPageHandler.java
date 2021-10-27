@@ -1,7 +1,9 @@
 package lu.mkremer.jserve.errorhandling;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 
 import lu.mkremer.jserve.conf.ServerConfiguration;
@@ -15,10 +17,10 @@ public class ErrorPageHandler extends AbstractRangedErrorHandler {
 	private String path;
 
 	@Override
-	public void respond(int errorCode, String status, String path, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
-		File file = new File(configuration.getServePath(), path);
+	public void respond(int errorCode, String status, String inPath, WriteableOutputStream out, ServerConfiguration configuration) throws IOException {
+		Path path = Paths.get(configuration.getServePath(), inPath);
 		
-		if (!file.exists() || file.isDirectory()) {
+		if (!Files.exists(path) || Files.isDirectory(path)) {
 			out.write("HTTP/1.0 404 Not found\r\n");
 			return;
 		}
@@ -30,7 +32,7 @@ public class ErrorPageHandler extends AbstractRangedErrorHandler {
 			out.write(status);
 		}
 		out.write("\r\n");
-		SocketResponder.serveFile(file, new Date(), out);
+		SocketResponder.serveFile(path, new Date(), out);
 	}
 
 	@Override

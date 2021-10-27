@@ -2,12 +2,12 @@ package lu.mkremer.jserve.threading;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -56,9 +56,7 @@ public class SocketResponder implements Runnable {
 				return;
 			}
 
-			File requestedFile = requestedPath.toFile();
-
-			if (!requestedFile.exists() || requestedFile.isDirectory()) {
+			if (!Files.exists(requestedPath) || Files.isDirectory(requestedPath)) {
 				respondWithError(404, "Not found", request, mappedPath, out);
 				return;
 			}
@@ -66,7 +64,7 @@ public class SocketResponder implements Runnable {
 			Logger.trace("{} 200 {} -> {} ({}:{})", request.getMethod().name(), request.getPath(), mappedPath, socket.getInetAddress().getHostName(), socket.getPort());
 
 			out.write("HTTP/1.0 200 OK\r\n");
-			serveFile(requestedFile, requestDate, out);
+			serveFile(requestedPath, requestDate, out);
 			out.flush();
 		} catch (SocketException e) {
 			Logger.debug(e, "A socket error occurred");
@@ -87,7 +85,7 @@ public class SocketResponder implements Runnable {
 		configuration.findErrorHandler(code, mappedPath).respond(code, status, mappedPath, out, configuration);
 	}
 	
-	public static void serveFile(File file, Date requestDate, WriteableOutputStream out) throws IOException {
+	public static void serveFile(Path path, Date requestDate, WriteableOutputStream out) throws IOException {
 		Date expireDate = new Date(requestDate.getTime() + 3600000);
 		
 		out.write("Date: ");
@@ -97,22 +95,22 @@ public class SocketResponder implements Runnable {
 		out.write(BuildVersion.VERSION);
 		out.write("\r\n");
 		out.write("Content-Type: ");
-		out.write(MimeContext.getInstance().getMimeType(file.toPath()));
+		out.write(MimeContext.getInstance().getMimeType(path));
 		out.write("\r\n");
 		out.write("Content-Length: ");
-		out.write(String.valueOf(file.length()));
+		out.write(String.valueOf(Files.size(path))); // TODO: Postprocessing?
 		out.write("\r\n");
 		out.write("Expires: ");
 		out.write(dateFormatter.format(expireDate));
 		out.write("\r\n");
 		out.write("Last-modified: ");
-		out.write(dateFormatter.format(new Date(file.lastModified())));
+		out.write(dateFormatter.format(new Date(Files.getLastModifiedTime(path).toMillis())));
 		out.write("\r\n");
 		out.write("\r\n");
 		byte buffer[] = new byte[2048];
 		int length;
-		try (FileInputStream fis = new FileInputStream(file)) {
-			while ((length = fis.read(buffer)) != -1) {
+		try (InputStream in = Files.newInputStream(path)) {
+			while ((length = in.read(buffer)) != -1) {
 				out.write(buffer, 0, length);
 				out.flush();
 			}
